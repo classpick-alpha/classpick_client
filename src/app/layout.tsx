@@ -1,24 +1,22 @@
-import type { Metadata } from "next";
+import { ReactNode } from 'react';
 
-import { ReactNode } from "react";
+import type { Metadata } from 'next';
 
-import '@/style/global.css'
+import '@/style/global.css';
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const metadata: Metadata = {
-  title: "Classpick",
-  description: "Classpick",
+  title: 'Classpick',
+  description: 'Classpick',
 };
 
 export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="ko">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
