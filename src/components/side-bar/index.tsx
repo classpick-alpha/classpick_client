@@ -8,7 +8,9 @@ export default function SideBar() {
 
       <hr className="border-1 border-gray-100" />
 
-      <SideBarFilter />
+      <div className="max-h-[580px] overflow-y-auto">
+        <SideBarFilter />
+      </div>
     </div>
   );
 }

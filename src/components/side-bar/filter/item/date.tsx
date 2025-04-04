@@ -1,0 +1,114 @@
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+import { sideBarFilterContext } from '@/components/side-bar/filter';
+import SideBarFilterItem from '@/components/side-bar/filter/item/index';
+
+import { useRoomFilterStore } from '@/store/room-filter.store';
+import { format } from 'date-fns';
+import { ArrowLeft, ArrowRight } from 'iconsax-react';
+import { twMerge } from 'tailwind-merge';
+
+export default function SideBarFilterDateItem() {
+  const { setOpen, setActive } = useContext(sideBarFilterContext);
+  const { date, setDate } = useRoomFilterStore();
+
+  const today = useMemo(() => new Date(), []);
+
+  const [year, setYear] = useState<number>(today.getFullYear());
+  const [month, setMonth] = useState<number>(today.getMonth() + 1);
+
+  useEffect(() => {
+    if (month < 1) {
+      setYear((prev) => prev - 1);
+      setMonth(12);
+    } else if (month > 12) {
+      setYear((prev) => prev + 1);
+      setMonth(1);
+    }
+  }, [month]);
+
+  const getCalendarDays = useCallback((year: number, month: number) => {
+    const firstDate = new Date(year, month - 1, 1);
+    const lastDate = new Date(year, month, 0);
+
+    const startDay = firstDate.getDay();
+    const endDate = lastDate.getDate();
+
+    const days: (number | null)[] = [];
+
+    for (let i = 0; i < startDay; i++) {
+      days.push(null);
+    }
+
+    for (let d = 1; d <= endDate; d++) {
+      days.push(d);
+    }
+
+    return days;
+  }, []);
+
+  return (
+    <SideBarFilterItem
+      name="date"
+      title="예약일자"
+      value={date}
+      labelFormatter={(date) => format(date, 'M월 d일')}
+      placeholder="강의실 예약할 일자를 선택해주세요"
+      onActive={() => {
+        if (date) return;
+        setDate(new Date());
+      }}
+    >
+      <div className="flex flex-col gap-2">
+        <section className="flex items-center justify-center gap-3">
+          <button className="cursor-pointer p-1.5" onClick={() => setMonth((prev) => prev - 1)}>
+            <ArrowLeft size={20} color="var(--color-classpick-500)" />
+          </button>
+          <p className="text-sm font-bold tracking-[-0.4px] text-neutral-700">
+            {year}년 {month}월
+          </p>
+          <button className="cursor-pointer p-1.5" onClick={() => setMonth((prev) => prev + 1)}>
+            <ArrowRight size={20} color="var(--color-classpick-500)" />
+          </button>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <div className="grid grid-cols-7 text-center text-xs font-bold text-zinc-600">
+            <p>일</p>
+            <p>월</p>
+            <p>화</p>
+            <p>수</p>
+            <p>목</p>
+            <p>금</p>
+            <p>토</p>
+          </div>
+
+          <div className="grid grid-cols-7 text-center text-xs font-bold text-gray-700">
+            {getCalendarDays(year, month).map((day, idx) => (
+              <div
+                key={idx}
+                className={twMerge(
+                  'flex size-8 items-center justify-center rounded-full',
+                  day === null ? 'text-transparent' : 'hover:bg-classpick-100 cursor-pointer',
+                  year === date?.getFullYear() &&
+                    month === date?.getMonth() + 1 &&
+                    day === date?.getDate()
+                    ? 'bg-classpick-500 hover:bg-classpick-500 cursor-pointer text-white'
+                    : '',
+                )}
+                onClick={() => {
+                  if (!day) return;
+                  setDate(new Date(year, month - 1, day));
+                  setActive((prev) => [...prev, 'people', 'room']);
+                  setOpen('people');
+                }}
+              >
+                {day ?? ''}
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </SideBarFilterItem>
+  );
+}
