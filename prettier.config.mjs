@@ -20,6 +20,7 @@ const config = {
     '^@/hooks',
     '^@/lib',
     '^@/style',
+    '^@/public',
     '^[./]',
     '<THIRD_PARTY_MODULES>',
   ],

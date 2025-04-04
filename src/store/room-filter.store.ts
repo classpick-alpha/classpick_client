@@ -8,10 +8,10 @@ interface Type {
 }
 
 interface Action {
-  setBuilding: (building: string) => void;
-  setPeople: (people: number) => void;
-  setDate: (date: Date) => void;
-  setRoom: (room: number) => void;
+  setBuilding: (building: string | undefined) => void;
+  setPeople: (people: number | undefined) => void;
+  setDate: (date: Date | undefined) => void;
+  setRoom: (room: number | undefined) => void;
 }
 
 const initialState: Type = {
@@ -23,8 +23,8 @@ const initialState: Type = {
 
 export const useRoomFilterStore = create<Type & Action>((set) => ({
   ...initialState,
-  setBuilding: (building: string) => set({ building }),
-  setPeople: (people: number) => set({ people }),
-  setDate: (date: Date) => set({ date }),
-  setRoom: (room: number) => set({ room }),
+  setBuilding: (building: string | undefined) => set({ building }),
+  setPeople: (people: number | undefined) => set({ people }),
+  setDate: (date: Date | undefined) => set({ date }),
+  setRoom: (room: number | undefined) => set({ room }),
 }));

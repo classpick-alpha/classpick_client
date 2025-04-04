@@ -1,3 +1,5 @@
+'use client';
+
 import SideBarFilter from '@/components/side-bar/filter';
 import SideBarMenu from '@/components/side-bar/menu';
 
@@ -8,7 +10,7 @@ export default function SideBar() {
 
       <hr className="border-1 border-gray-100" />
 
-      <div className="max-h-[580px] overflow-y-auto">
+      <div className="max-h-[calc(100dvh-80px-32px-156px)] overflow-y-auto">
         <SideBarFilter />
       </div>
     </div>

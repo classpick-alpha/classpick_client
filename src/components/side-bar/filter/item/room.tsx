@@ -57,7 +57,7 @@ export default function SideBarFilterRoomItem() {
       }}
       placeholder="예약할 강의실을 선택해주세요"
     >
-      <div className="flex max-h-[140px] flex-col overflow-y-auto pl-3">
+      <div className="scrollbar-thumb-sidebar-filter-description flex max-h-[140px] flex-col overflow-y-auto pl-3">
         {MOCK_DATA.map((room) => (
           <p
             key={room.room_id}

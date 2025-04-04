@@ -10,7 +10,7 @@
 
 @layer base {
     * {
-        @apply scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-sidebar-filter-description
+        @apply scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar scrollbar-w-1.5 scrollbar-thumb-gray-500
     }
 
     body {
@@ -28,6 +28,7 @@
     --font-sans: 'NanumSquareAc', sans-serif;
 
     --color-sidebar-primary: #787486;
+    --color-sidebar-primary-hover: #54515e;
 
     --color-classpick-50:  #f2f3ff;
     --color-classpick-100: #e0e1ff;

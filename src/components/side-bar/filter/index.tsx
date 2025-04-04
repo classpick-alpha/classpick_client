@@ -1,5 +1,3 @@
-'use client';
-
 import { Dispatch, SetStateAction, createContext, useCallback, useEffect, useState } from 'react';
 
 import SideBarFilterBuildingItem from '@/components/side-bar/filter/item/building';
