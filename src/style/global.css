@@ -1,1 +1,38 @@
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css);
+
 @import "tailwindcss";
+
+@plugin 'tailwind-scrollbar' {
+    nocompatible: true;
+    preferredStrategy: 'pseudoelements';
+}
+
+@layer base {
+    * {
+        @apply scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-sidebar-filter-description
+    }
+
+    body {
+        @apply bg-gray-100
+    }
+}
+
+@theme {
+    --font-sans: 'NanumSquareAc', sans-serif;
+
+    --color-sidebar-primary: #787486;
+
+    --color-classpick-50:  #f2f3ff;
+    --color-classpick-100: #e0e1ff;
+    --color-classpick-200: #c2c3ff;
+    --color-classpick-300: #a3a5ff;
+    --color-classpick-400: #8487ff;
+    --color-classpick-500: #4e51ff;
+    --color-classpick-600: #3d3ee0;
+    --color-classpick-700: #3132b3;
+    --color-classpick-800: #262786;
+    --color-classpick-900: #1a1b59;
+
+    --color-sidebar-filter-title: #6C6FFF;
+    --color-sidebar-filter-description: #7C7EFF;
+}
