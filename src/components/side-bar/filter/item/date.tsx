@@ -17,6 +17,26 @@ export default function SideBarFilterDateItem() {
   const [year, setYear] = useState<number>(today.getFullYear());
   const [month, setMonth] = useState<number>(today.getMonth() + 1);
 
+  const neareastWeek = useCallback((date: Date): [Date, Date] => {
+    let startDate = new Date(date);
+
+    if (startDate.getDay() === 0 || startDate.getDay() === 6) {
+      startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 2);
+    }
+
+    while (startDate.getDay() !== 1) {
+      startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 1);
+    }
+
+    const endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate() + 4,
+    );
+
+    return [startDate, endDate];
+  }, []);
+
   const getCalendarDays = useCallback((year: number, month: number) => {
     const firstDate = new Date(year, month - 1, 1);
     const lastDate = new Date(year, month, 0);
@@ -51,18 +71,13 @@ export default function SideBarFilterDateItem() {
     <SideBarFilterItem
       name="date"
       title="예약일자"
-      value={[startDate, endDate]}
+      value={startDate && endDate ? [startDate, endDate] : undefined}
       labelFormatter={([startDate, endDate]) =>
         startDate && endDate
           ? `${format(startDate!, 'M월 d일')} ~ ${format(endDate!, 'M월 d일')}`
           : ''
       }
       placeholder="강의실 예약할 일자를 선택해주세요"
-      onActive={() => {
-        if (startDate && endDate) return;
-        setStartDate(new Date());
-        setEndDate(new Date());
-      }}
     >
       <div className="flex flex-col gap-2">
         <section className="flex items-center justify-center gap-3">
@@ -94,68 +109,47 @@ export default function SideBarFilterDateItem() {
                 key={idx}
                 className={twMerge(
                   'flex size-9 items-center justify-center',
-                  day === null ? 'text-transparent' : 'cursor-pointer',
+                  day === null
+                    ? 'text-transparent'
+                    : 'hover:bg-classpick-50 cursor-pointer hover:rounded-full',
                   startDate && endDate && day
                     ? twMerge(
-                        year === startDate.getFullYear() &&
-                          month === startDate.getMonth() + 1 &&
-                          day === startDate.getDate()
-                          ? 'rounded-l-full'
-                          : '',
-                        year === endDate.getFullYear() &&
-                          month === endDate.getMonth() + 1 &&
-                          day === endDate.getDate()
-                          ? 'rounded-r-full'
-                          : '',
                         startDate.getFullYear() === year &&
                           startDate.getMonth() + 1 === month &&
                           startDate.getDate() <= day &&
                           (endDate.getFullYear() === year && endDate.getMonth() + 1 === month
                             ? day <= endDate.getDate()
                             : true)
-                          ? 'bg-classpick-500 text-white'
-                          : 'hover:bg-classpick-100 hover:rounded-full',
+                          ? 'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none'
+                          : '',
                         endDate.getFullYear() === year &&
                           endDate.getMonth() + 1 === month &&
                           day <= endDate.getDate() &&
                           (startDate.getFullYear() === year && startDate.getMonth() + 1 === month
                             ? startDate.getDate() <= day
                             : true)
-                          ? 'bg-classpick-500 text-white'
-                          : 'hover:bg-classpick-100 hover:rounded-full',
-                        new Date(year, month - 1, day).getDay() === 0 ||
-                          new Date(year, month - 1, day).getDay() === 6
-                          ? 'cursor-default hover:bg-transparent'
+                          ? 'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none'
+                          : '',
+                        year === startDate.getFullYear() &&
+                          month === startDate.getMonth() + 1 &&
+                          day === startDate.getDate()
+                          ? 'rounded-l-full hover:rounded-l-full'
+                          : '',
+                        year === endDate.getFullYear() &&
+                          month === endDate.getMonth() + 1 &&
+                          day === endDate.getDate()
+                          ? 'rounded-r-full hover:rounded-r-full'
                           : '',
                       )
                     : '',
                 )}
                 onClick={() => {
                   if (!day) return;
-                  if (
-                    new Date(year, month - 1, day).getDay() === 0 ||
-                    new Date(year, month - 1, day).getDay() === 6
-                  )
-                    return;
 
-                  let startDate = new Date(year, month - 1, day);
-
-                  while (startDate.getDay() != 1) {
-                    startDate = new Date(
-                      startDate.getFullYear(),
-                      startDate.getMonth(),
-                      startDate.getDate() - 1,
-                    );
-                  }
+                  const [startDate, endDate] = neareastWeek(new Date(year, month - 1, day));
 
                   setStartDate(startDate);
-                  setEndDate(
-                    new Date(
-                      startDate.getFullYear(),
-                      startDate.getMonth(),
-                      startDate.getDate() + 4,
-                    ),
-                  );
+                  setEndDate(endDate);
                   setActive((prev) => [...prev, 'people', 'room']);
                   setOpen('people');
                 }}
