@@ -10,7 +10,7 @@ export default function SideBar() {
 
       <hr className="border-1 border-gray-100" />
 
-      <div className="max-h-[calc(100dvh-80px-32px-156px)] overflow-y-auto">
+      <div className="my-2 max-h-[calc(100dvh-80px-32px-156px-16px)] overflow-y-auto">
         <SideBarFilter />
       </div>
     </div>
