@@ -1,6 +1,6 @@
 import { MouseEvent, useCallback } from 'react';
 
-import { pxPerMinute, startHour } from '@/app/_config';
+import { pxPerMinute, splitMinute, startHour } from '@/app/_config';
 
 import useTimetableCell from '@/hook/timetable/cell';
 
@@ -36,7 +36,7 @@ export default function TableBlock({
           <div
             key={slot}
             className="group absolute right-0 left-[10px] w-[calc(100%-20px)] cursor-pointer"
-            style={{ top: `${slot * pxPerMinute}px`, height: `${20 * pxPerMinute}px` }}
+            style={{ top: `${slot * pxPerMinute}px`, height: `${splitMinute * pxPerMinute}px` }}
             onMouseDown={(e) => !occupied && handleDragStart(e, slotDate)}
             onMouseEnter={(e) => !occupied && handleDragging(e, slotDate)}
           >
