@@ -1,13 +1,6 @@
 import { MouseEvent, ReactNode } from 'react';
 
-import {
-  endHour,
-  pxPerMinute,
-  splitMinute,
-  startHour,
-  totalHeight,
-  totalMinutes,
-} from '@/app/_config';
+import { endHour, pxPerMinute, startHour, totalHeight } from '@/app/_config';
 
 interface TableContainerProps {
   handleDragEnd: (e: MouseEvent) => void;
@@ -27,17 +20,6 @@ export default function TableContainer({ handleDragEnd, children }: TableContain
           >
             <span className="text-sm font-extrabold text-neutral-600">{i + startHour}:00</span>
           </div>
-        ))}
-      </div>
-
-      {/*특정 분마다 그리드 가이드*/}
-      <div>
-        {Array.from({ length: Math.floor(totalMinutes / splitMinute) + 1 }, (_, i) => (
-          <hr
-            key={i}
-            className="absolute right-0 left-28 z-0 border-neutral-200"
-            style={{ top: `${i * splitMinute * pxPerMinute}px` }}
-          />
         ))}
       </div>
 
