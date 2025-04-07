@@ -15,11 +15,11 @@ export const sideBarMenu: SideBarMenu[] = [
   {
     icon: TaskSquare,
     content: '예약내역',
-    link: '/#예약내역',
+    link: '/my-reservation',
   },
   {
     icon: Setting2,
     content: '설정',
-    link: '/#설정',
+    link: '/setting',
   },
 ];

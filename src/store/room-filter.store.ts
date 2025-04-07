@@ -1,3 +1,5 @@
+import { RoomData } from '@/components/side-bar/filter/item/room';
+
 import { create } from 'zustand';
 
 interface Type {
@@ -5,7 +7,7 @@ interface Type {
   people?: number;
   startDate?: Date;
   endDate?: Date;
-  room?: number;
+  room?: RoomData;
 }
 
 interface Action {
@@ -13,7 +15,7 @@ interface Action {
   setPeople: (people: number | undefined) => void;
   setStartDate: (date: Date | undefined) => void;
   setEndDate: (date: Date | undefined) => void;
-  setRoom: (room: number | undefined) => void;
+  setRoom: (room: RoomData | undefined) => void;
 }
 
 const initialState: Type = {
@@ -30,5 +32,5 @@ export const useRoomFilterStore = create<Type & Action>((set) => ({
   setPeople: (people: number | undefined) => set({ people }),
   setStartDate: (startDate: Date | undefined) => set({ startDate }),
   setEndDate: (endDate: Date | undefined) => set({ endDate }),
-  setRoom: (room: number | undefined) => set({ room }),
+  setRoom: (room: RoomData | undefined) => set({ room }),
 }));

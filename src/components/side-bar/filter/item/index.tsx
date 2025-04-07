@@ -37,7 +37,7 @@ export default function SideBarFilterItem<T>({
   return (
     <div
       className={twMerge(
-        'rounded-md bg-white shadow-md',
+        'w-[260px] rounded-md bg-white shadow-md',
         active.includes(name) ? 'border-classpick-300 border' : '',
       )}
     >
@@ -45,7 +45,7 @@ export default function SideBarFilterItem<T>({
         <div className="flex flex-col gap-3">
           <p
             className={twMerge(
-              'font-bold tracking-[-0.5px]',
+              'font-bold',
               active.includes(name) ? 'text-sidebar-filter-title' : 'text-neutral-500',
             )}
           >
@@ -54,7 +54,7 @@ export default function SideBarFilterItem<T>({
           <div className="flex justify-between">
             <p
               className={twMerge(
-                'text-xs font-bold tracking-[-0.35px]',
+                'text-xs font-bold',
                 active.includes(name) ? 'text-sidebar-filter-description' : 'text-neutral-400',
               )}
             >
