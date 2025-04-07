@@ -4,6 +4,7 @@ import { sideBarFilterContext } from '@/components/side-bar/filter';
 import SideBarFilterItem from '@/components/side-bar/filter/item/index';
 
 import { useRoomFilterStore } from '@/store/room-filter.store';
+import { nowExcludeTime } from '@/util';
 import { format } from 'date-fns';
 import { ArrowLeft, ArrowRight } from 'iconsax-react';
 import { twMerge } from 'tailwind-merge';
@@ -12,7 +13,7 @@ export default function SideBarFilterDateItem() {
   const { setOpen, setActive } = useContext(sideBarFilterContext);
   const { startDate, endDate, setStartDate, setEndDate } = useRoomFilterStore();
 
-  const today = useMemo(() => new Date(), []);
+  const today = useMemo(nowExcludeTime, []);
 
   const [year, setYear] = useState<number>(today.getFullYear());
   const [month, setMonth] = useState<number>(today.getMonth() + 1);
@@ -20,8 +21,10 @@ export default function SideBarFilterDateItem() {
   const neareastWeek = useCallback((date: Date): [Date, Date] => {
     let startDate = new Date(date);
 
-    if (startDate.getDay() === 0 || startDate.getDay() === 6) {
-      startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 2);
+    if (startDate.getDay() === 6) {
+      startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 1);
+    } else if (startDate.getDay() === 0) {
+      startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 1);
     }
 
     while (startDate.getDay() !== 1) {
@@ -84,7 +87,7 @@ export default function SideBarFilterDateItem() {
           <button className="cursor-pointer p-1.5" onClick={() => setMonth((prev) => prev - 1)}>
             <ArrowLeft size={20} color="var(--color-classpick-500)" />
           </button>
-          <p className="text-sm font-bold tracking-[-0.4px] text-neutral-700">
+          <p className="text-sm font-bold text-neutral-700">
             {year}년 {month}월
           </p>
           <button className="cursor-pointer p-1.5" onClick={() => setMonth((prev) => prev + 1)}>
@@ -109,44 +112,48 @@ export default function SideBarFilterDateItem() {
                 key={idx}
                 className={twMerge(
                   'flex size-9 items-center justify-center',
-                  day === null
-                    ? 'text-transparent'
-                    : 'hover:bg-classpick-50 cursor-pointer hover:rounded-full',
-                  startDate && endDate && day
-                    ? twMerge(
-                        startDate.getFullYear() === year &&
-                          startDate.getMonth() + 1 === month &&
-                          startDate.getDate() <= day &&
-                          (endDate.getFullYear() === year && endDate.getMonth() + 1 === month
-                            ? day <= endDate.getDate()
-                            : true)
-                          ? 'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none'
-                          : '',
-                        endDate.getFullYear() === year &&
-                          endDate.getMonth() + 1 === month &&
-                          day <= endDate.getDate() &&
-                          (startDate.getFullYear() === year && startDate.getMonth() + 1 === month
-                            ? startDate.getDate() <= day
-                            : true)
-                          ? 'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none'
-                          : '',
-                        year === startDate.getFullYear() &&
-                          month === startDate.getMonth() + 1 &&
-                          day === startDate.getDate()
-                          ? 'rounded-l-full hover:rounded-l-full'
-                          : '',
-                        year === endDate.getFullYear() &&
-                          month === endDate.getMonth() + 1 &&
-                          day === endDate.getDate()
-                          ? 'rounded-r-full hover:rounded-r-full'
-                          : '',
-                      )
-                    : '',
+
+                  day
+                    ? 'hover:bg-classpick-50 cursor-pointer hover:rounded-full'
+                    : 'text-transparent',
+
+                  startDate &&
+                    endDate &&
+                    day &&
+                    twMerge(
+                      startDate.getFullYear() === year &&
+                        startDate.getMonth() + 1 === month &&
+                        startDate.getDate() <= day &&
+                        (endDate.getFullYear() === year && endDate.getMonth() + 1 === month
+                          ? day <= endDate.getDate()
+                          : true) &&
+                        'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none',
+
+                      endDate.getFullYear() === year &&
+                        endDate.getMonth() + 1 === month &&
+                        day <= endDate.getDate() &&
+                        (startDate.getFullYear() === year && startDate.getMonth() + 1 === month
+                          ? startDate.getDate() <= day
+                          : true) &&
+                        'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none',
+
+                      year === startDate.getFullYear() &&
+                        month === startDate.getMonth() + 1 &&
+                        day === startDate.getDate() &&
+                        'rounded-l-full hover:rounded-l-full',
+
+                      year === endDate.getFullYear() &&
+                        month === endDate.getMonth() + 1 &&
+                        day === endDate.getDate() &&
+                        'rounded-r-full hover:rounded-r-full',
+                    ),
                 )}
                 onClick={() => {
                   if (!day) return;
 
                   const [startDate, endDate] = neareastWeek(new Date(year, month - 1, day));
+
+                  console.log(startDate, endDate);
 
                   setStartDate(startDate);
                   setEndDate(endDate);

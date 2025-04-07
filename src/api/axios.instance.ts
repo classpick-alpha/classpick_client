@@ -1,3 +1,4 @@
+import { now } from '@/util';
 import axios from 'axios';
 
 const instance = axios.create({
@@ -11,7 +12,7 @@ instance.interceptors.request.use((config) => {
   const originalData = config.data || {};
 
   config.data = {
-    timestamp: new Date().toISOString(),
+    timestamp: now().toISOString(),
     data: originalData,
   };
 

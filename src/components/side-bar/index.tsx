@@ -9,7 +9,7 @@ export default function SideBar() {
   const pathname = usePathname();
 
   return (
-    <div className="h-[calc(100dvh-80px-32px)] min-w-[280px] rounded-2xl bg-white">
+    <div className="h-[calc(100dvh-80px-32px)] min-w-[300px] rounded-2xl bg-white">
       <SideBarMenu />
 
       {pathname === '/' && (

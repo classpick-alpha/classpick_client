@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import MockAvatar from '@/public/__mock__/avatar.png';
 
@@ -8,10 +9,12 @@ import colors from 'tailwindcss/colors';
 export default function Header() {
   return (
     <header className="flex h-20 items-center justify-between border-b border-zinc-300 bg-white px-10 md:px-20">
-      <section className="flex items-center gap-2">
-        {/* TODO: 로고 이미지 교체 */}
-        <div className="size-6.5 rounded-full bg-zinc-300" />
-        <p className="text-classpick-500 text-2xl font-extrabold tracking-[-1.9px]">ClassPick</p>
+      <section>
+        <Link href="/" className="flex items-center gap-2">
+          {/* TODO: 로고 이미지 교체 */}
+          <div className="size-6.5 rounded-full bg-zinc-300" />
+          <p className="text-classpick-500 text-2xl font-extrabold tracking-[-1.8px]">ClassPick</p>
+        </Link>
       </section>
 
       <section className="hidden w-[500px] xl:block">

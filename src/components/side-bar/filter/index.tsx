@@ -39,7 +39,7 @@ export default function SideBarFilter() {
   );
 
   return (
-    <section className="flex flex-col gap-3 px-4 py-6">
+    <section className="flex flex-col items-center gap-3 py-6">
       <sideBarFilterContext.Provider value={{ open, setOpen: _setOpen, active, setActive }}>
         <SideBarFilterBuildingItem />
         <SideBarFilterDateItem />
