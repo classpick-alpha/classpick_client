@@ -1,4 +1,5 @@
 @import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css);
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 @import "tailwindcss";
 
@@ -22,19 +23,55 @@
         -webkit-appearance: none;
         margin: 0;
     }
+
+    .title1 {
+        @apply text-2xl font-extrabold leading-7
+    }
+
+    .title2 {
+        @apply text-xl font-normal leading-6 tracking-[-0.5px]
+    }
+
+    .subtitle1 {
+        @apply text-lg font-extrabold leading-[22px]
+    }
+
+    .subtitle2 {
+        @apply text-base font-bold leading-5 tracking-[-0.48px]
+    }
+
+    .body1 {
+        @apply text-base font-normal leading-5 tracking-[-0.4px]
+    }
+
+    .body2 {
+        @apply text-xs font-bold leading-4 tracking-[-0.36px]
+    }
+
+    .caption1 {
+        @apply text-sm font-normal leading-5 tracking-[0.28px]
+    }
+
+    .caption2 {
+        @apply text-[10px] font-bold leading-3.5 tracking-[-0.3px]
+    }
 }
 
 @theme {
-    --font-sans: 'NanumSquareAc', sans-serif;
+    --font-sans: 'NanumSquare', sans-serif;
+    --font-nanum: 'NanumSquare', sans-serif;
+    --font-pretendard: 'Pretendard', sans-serif;
 
     --color-sidebar-primary: #787486;
     --color-sidebar-primary-hover: #54515e;
 
-    --color-classpick-50:  #f2f3ff;
+    --color-classpick-0: #f7f8ff;
+    --color-classpick-50: #f2f3ff;
     --color-classpick-100: #e0e1ff;
     --color-classpick-200: #c2c3ff;
     --color-classpick-300: #a3a5ff;
     --color-classpick-400: #8487ff;
+    --color-classpick-450: #7375ff;
     --color-classpick-500: #4e51ff;
     --color-classpick-600: #3d3ee0;
     --color-classpick-700: #3132b3;
@@ -43,4 +80,16 @@
 
     --color-sidebar-filter-title: #6C6FFF;
     --color-sidebar-filter-description: #7C7EFF;
+
+    --color-primary-gray-900: #0a0a0a;
+    --color-primary-gray-800: #161619;
+    --color-primary-gray-600: #3c3b41;
+    --color-primary-gray-500: #505050;
+    --color-primary-gray-400: #c9c9c9;
+    --color-primary-gray-300: #d9d9d9;
+    --color-primary-gray-200: #f8f8f8;
+    --color-primary-gray-white: #ffffff;
+
+    --color-system-alarm: #ff6c6c;
+    --color-system-alarm2: #2a93f4;
 }

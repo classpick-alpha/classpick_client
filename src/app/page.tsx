@@ -2,8 +2,6 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
-import { StaticImageData } from 'next/image';
-
 import TableBlock from '@/app/_component/table-block';
 import TableContainer from '@/app/_component/table-container';
 import TableCurrentBar from '@/app/_component/table-current-bar';
@@ -12,8 +10,6 @@ import TablePendingBox from '@/app/_component/table-pending-box';
 import TableReservedBox from '@/app/_component/table-reserved-box';
 import TableSummary from '@/app/_component/table-summary';
 import { startHour } from '@/app/_config';
-
-import AvatarPlaceholder from '@/public/__mock__/avatar.png';
 
 import useTimetableDrag from '@/hook/timetable/drag';
 import { useRoomFilterStore } from '@/store/room-filter.store';
@@ -24,7 +20,6 @@ export interface EventData {
   status: 'pending' | 'reserved';
   user?: {
     name: string;
-    avatar: StaticImageData | string;
   };
 }
 
@@ -35,7 +30,6 @@ const MOCK_EVENT_DATA: EventData[] = [
     status: 'reserved',
     user: {
       name: '손대현',
-      avatar: AvatarPlaceholder,
     },
   },
   {

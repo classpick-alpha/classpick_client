@@ -1,7 +1,4 @@
-import Image from 'next/image';
 import Link from 'next/link';
-
-import MockAvatar from '@/public/__mock__/avatar.png';
 
 import { HambergerMenu, MessageQuestion, Notification, SearchNormal1 } from 'iconsax-react';
 import colors from 'tailwindcss/colors';
@@ -37,19 +34,10 @@ export default function Header() {
           </button>
         </section>
 
-        <section className="flex items-center gap-3">
-          <div className="flex flex-col items-end">
-            <p className="leading-5 text-neutral-700">Seo Myung Kyun</p>
-            <p className="text-sm text-zinc-500">Industrial Design</p>
-          </div>
-          <Image
-            src={MockAvatar}
-            alt="Seo Myung Kyun"
-            width={38}
-            height={38}
-            className="size-9.5 rounded-full"
-          />
-        </section>
+        <div className="flex flex-col items-end">
+          <p className="leading-5 text-neutral-700">Seo Myung Kyun</p>
+          <p className="text-sm text-zinc-500">Industrial Design</p>
+        </div>
       </div>
 
       <div className="block md:hidden">
