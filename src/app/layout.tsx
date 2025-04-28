@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import Header from '@/components/header';
+import ModalContainer from '@/components/modal-container';
 import SideBar from '@/components/side-bar';
 
 import '@/style/global.css';
@@ -25,6 +26,7 @@ export default function Layout({ children }: LayoutProps) {
           <SideBar />
           {children}
         </main>
+        <ModalContainer />
       </body>
     </html>
   );
