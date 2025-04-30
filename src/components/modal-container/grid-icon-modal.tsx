@@ -46,8 +46,8 @@ export default function GridIconModal({
 
         <section className="flex flex-col items-center gap-4">
           <div className="flex flex-col items-center">
-            <h2 className="subtitle1-nanum text-neutral-900">{title}</h2>
-            <h3 className="caption1-nanum text-gray-500">{description}</h3>
+            <h2 className="subtitle1-nanum text-primary-gray-800">{title}</h2>
+            <h3 className="caption1-nanum text-primary-gray-500">{description}</h3>
           </div>
         </section>
 
