@@ -1,9 +1,14 @@
+'use client';
+
 import Link from 'next/link';
 
+import { useUserStore } from '@/store/user.store';
 import { HambergerMenu, MessageQuestion, Notification, SearchNormal1 } from 'iconsax-react';
 import colors from 'tailwindcss/colors';
 
 export default function Header() {
+  const { user } = useUserStore();
+
   return (
     <header className="flex h-20 items-center justify-between border-b border-zinc-300 bg-white px-10 md:px-20">
       <section>
@@ -34,10 +39,14 @@ export default function Header() {
           </button>
         </section>
 
-        <div className="flex flex-col items-end">
-          <p className="leading-5 text-neutral-700">Seo Myung Kyun</p>
-          <p className="text-sm text-zinc-500">Industrial Design</p>
-        </div>
+        {user ? (
+          <div className="flex flex-col items-end">
+            <p className="leading-5 text-neutral-700">{user.name}</p>
+            <p className="text-sm text-zinc-500">{user.group}</p>
+          </div>
+        ) : (
+          <p>TODO: 로그인안됨</p>
+        )}
       </div>
 
       <div className="block md:hidden">
