@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { Icon } from 'iconsax-react';
+import { twMerge } from 'tailwind-merge';
 import colors from 'tailwindcss/colors';
 
 interface GridIconModalProps {
@@ -32,27 +33,37 @@ export default function GridIconModal({
 
         <div className="absolute inset-0 grid grid-cols-15">
           {Array.from({ length: 15 * 100 }).map((_, idx) => (
-            <div key={idx} className="aspect-square border-[0.1px] border-white/30"></div>
+            <div
+              key={idx}
+              className={twMerge('aspect-square border-white/20', idx % 15 !== 0 && 'border-l')}
+            />
+          ))}
+        </div>
+
+        <div className="absolute inset-0 grid grid-cols-15">
+          {Array.from({ length: 15 * 100 }).map((_, idx) => (
+            <div
+              key={idx}
+              className={twMerge('aspect-square border-white/20', idx >= 15 && 'border-t')}
+            />
           ))}
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center gap-6 pt-9 pb-4">
+      <div className="relative z-10 flex flex-col items-center justify-center gap-4 pt-9 pb-4">
         <div className="w-fit rounded-full border border-neutral-200 bg-gradient-to-b from-neutral-100 to-transparent p-6 backdrop-blur-md">
           <div className="rounded-full border border-gray-200 bg-white p-4">
             <Icon size={32} color={colors.slate['600']} variant="Bold" />
           </div>
         </div>
 
-        <section className="flex flex-col items-center gap-4">
-          <div className="flex flex-col items-center">
-            <h2 className="subtitle1-nanum text-primary-gray-800">{title}</h2>
-            <h3 className="caption1-nanum text-primary-gray-500">{description}</h3>
-          </div>
+        <section className="flex flex-col items-center">
+          <h2 className="subtitle1-nanum text-primary-gray-800">{title}</h2>
+          <h3 className="caption1-nanum text-primary-gray-500">{description}</h3>
         </section>
 
         {children && (
-          <section className="w-[calc(100%-56px)] rounded-2xl bg-white px-7 pt-6 pb-3.5 shadow-xs">
+          <section className="w-[calc(100%-56px)] rounded-2xl bg-white p-6 shadow-xs">
             {children}
           </section>
         )}

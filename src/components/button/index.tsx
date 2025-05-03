@@ -1,10 +1,9 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ComponentProps } from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ComponentProps<'button'> {
   variant?: 'primary' | 'secondary' | 'white';
-  children: ReactNode;
 }
 
 export default function Button({
