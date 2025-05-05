@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { pxPerMinute, startHour } from '@/app/_config';
+import { pxPerMinute, startHour } from '@/app/[id]/_config';
 
 interface TableDraggingArea {
   date: Date;

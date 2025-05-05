@@ -1,5 +1,5 @@
-import { pxPerMinute } from '@/app/_config';
-import { EventData } from '@/app/page';
+import { pxPerMinute } from '@/app/[id]/_config';
+import { EventData } from '@/app/[id]/page';
 
 import { formatDate } from 'date-fns';
 

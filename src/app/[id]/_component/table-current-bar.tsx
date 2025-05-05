@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { pxPerMinute, startHour } from '@/app/_config';
+import { pxPerMinute, startHour } from '@/app/[id]/_config';
 
 import { now, nowExcludeTime } from '@/util';
 

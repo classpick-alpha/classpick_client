@@ -1,7 +1,7 @@
 import { Dispatch, MouseEvent, SetStateAction, useCallback, useState } from 'react';
 
-import { splitMinute } from '@/app/_config';
-import { EventData } from '@/app/page';
+import { splitMinute } from '@/app/[id]/_config';
+import { EventData } from '@/app/[id]/page';
 
 interface useTimetableDragProps {
   events: EventData[];

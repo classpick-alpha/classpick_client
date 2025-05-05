@@ -1,4 +1,4 @@
-import { endHour, splitMinute, startHour } from '@/app/_config';
+import { endHour, splitMinute, startHour } from '@/app/[id]/_config';
 
 export default function useTimetableCell() {
   const slots: number[] = [];

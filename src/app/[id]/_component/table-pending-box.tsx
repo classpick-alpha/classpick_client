@@ -1,4 +1,4 @@
-import { pxPerMinute } from '@/app/_config';
+import { pxPerMinute } from '@/app/[id]/_config';
 
 interface TablePendingBoxProps {
   startOffset: number;

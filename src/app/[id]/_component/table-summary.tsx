@@ -1,30 +1,25 @@
 import { useMemo } from 'react';
 
-import { useFilterStore } from '@/store/filter.store';
 import { nowExcludeTime } from '@/util';
 import { formatDate } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 interface TableSummaryProps {
+  date: Date;
   dates: Date[];
+  roomName: string;
 }
 
-export default function TableSummary({ dates }: TableSummaryProps) {
-  const { startDate, room } = useFilterStore();
-
+export default function TableSummary({ date, dates, roomName }: TableSummaryProps) {
   const today = useMemo(nowExcludeTime, []);
-
-  if (!room) return null;
 
   return (
     <div className="flex flex-col gap-3 rounded-t-2xl">
       <div className="flex flex-col gap-2 pt-8 pl-7.5">
         <div className="text-2xl leading-6 font-extrabold text-neutral-700">
-          {startDate!.getMonth() + 1}월, {startDate!.getFullYear()}년
+          {date.getMonth() + 1}월, {date.getFullYear()}년
         </div>
-        <div className="text-lg leading-4.5 text-neutral-700">
-          {room.place_name} {room.unit_number}
-        </div>
+        <div className="text-lg leading-4.5 text-neutral-700">{roomName}</div>
       </div>
 
       <div className="flex">

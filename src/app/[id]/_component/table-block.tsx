@@ -1,6 +1,6 @@
 import { MouseEvent, useCallback } from 'react';
 
-import { pxPerMinute, splitMinute, startHour } from '@/app/_config';
+import { pxPerMinute, splitMinute, startHour } from '@/app/[id]/_config';
 
 import useTimetableCell from '@/hook/timetable/cell';
 import { twMerge } from 'tailwind-merge';
@@ -39,7 +39,7 @@ export default function TableBlock({
             className={twMerge(
               'w-full border-t border-neutral-200',
               timeSlots.at(-1) === slot && 'border-b',
-              date.getDay() % 2 === 0 && 'bg-slate-50',
+              date.getDay() % 2 === 0 && 'bg-neutral-50',
             )}
             style={{ top: `${slot * pxPerMinute}px`, height: `${splitMinute * pxPerMinute}px` }}
           >

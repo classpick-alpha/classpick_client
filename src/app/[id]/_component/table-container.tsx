@@ -1,6 +1,6 @@
 import { MouseEvent, ReactNode } from 'react';
 
-import { endHour, pxPerMinute, startHour, totalHeight } from '@/app/_config';
+import { endHour, pxPerMinute, startHour, totalHeight } from '@/app/[id]/_config';
 
 interface TableContainerProps {
   handleDragEnd: (e: MouseEvent) => void;
