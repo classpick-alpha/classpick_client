@@ -1,29 +1,21 @@
-import { Dispatch, SetStateAction, createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 
 import SideBarFilterBuildingItem from '@/components/side-bar/filter/item/building';
 import SideBarFilterDateItem from '@/components/side-bar/filter/item/date';
 import SideBarFilterPeopleItem from '@/components/side-bar/filter/item/people';
-import SideBarFilterRoomItem from '@/components/side-bar/filter/item/room';
+import SideBarFilterTimeItem from '@/components/side-bar/filter/item/time';
 
-export type FilterItem = 'building' | 'people' | 'date' | 'room';
+export type FilterItem = 'building' | 'people' | 'date' | 'time';
 
 interface SideBarFilterContext {
   open: FilterItem | undefined;
   setOpen: (value: FilterItem | undefined) => void;
-  active: FilterItem[];
-  setActive: Dispatch<SetStateAction<FilterItem[]>>;
 }
 
 export const sideBarFilterContext = createContext<SideBarFilterContext>({} as SideBarFilterContext);
 
 export default function SideBarFilter() {
   const [open, setOpen] = useState<FilterItem>();
-  const [active, setActive] = useState<FilterItem[]>([]);
-
-  useEffect(() => {
-    setActive(['building']);
-    setOpen('building');
-  }, []);
 
   const _setOpen = useCallback(
     (value: FilterItem | undefined) => {
@@ -40,11 +32,11 @@ export default function SideBarFilter() {
 
   return (
     <section className="flex flex-col items-center gap-3 py-6">
-      <sideBarFilterContext.Provider value={{ open, setOpen: _setOpen, active, setActive }}>
+      <sideBarFilterContext.Provider value={{ open, setOpen: _setOpen }}>
         <SideBarFilterBuildingItem />
-        <SideBarFilterDateItem />
         <SideBarFilterPeopleItem />
-        <SideBarFilterRoomItem />
+        <SideBarFilterDateItem />
+        <SideBarFilterTimeItem />
       </sideBarFilterContext.Provider>
     </section>
   );

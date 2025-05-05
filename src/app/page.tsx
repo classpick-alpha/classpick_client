@@ -12,7 +12,7 @@ import TableSummary from '@/app/_component/table-summary';
 import { startHour } from '@/app/_config';
 
 import useTimetableDrag from '@/hook/timetable/drag';
-import { useRoomFilterStore } from '@/store/room-filter.store';
+import { useFilterStore } from '@/store/filter.store';
 
 export interface EventData {
   start: Date;
@@ -42,7 +42,7 @@ const MOCK_EVENT_DATA: EventData[] = [
 export default function TimeTablePage() {
   const [events, setEvents] = useState<EventData[]>(MOCK_EVENT_DATA);
 
-  const { building, room, startDate, endDate } = useRoomFilterStore();
+  const { building, room, startDate, endDate } = useFilterStore();
 
   const {
     isDragging,

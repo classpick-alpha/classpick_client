@@ -1,17 +1,16 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { sideBarFilterContext } from '@/components/side-bar/filter';
 import SideBarFilterItem from '@/components/side-bar/filter/item/index';
 
-import { useRoomFilterStore } from '@/store/room-filter.store';
+import { useFilterStore } from '@/store/filter.store';
 import { nowExcludeTime } from '@/util';
 import { format } from 'date-fns';
 import { ArrowLeft, ArrowRight } from 'iconsax-react';
 import { twMerge } from 'tailwind-merge';
+import colors from 'tailwindcss/colors';
 
 export default function SideBarFilterDateItem() {
-  const { setOpen, setActive } = useContext(sideBarFilterContext);
-  const { startDate, endDate, setStartDate, setEndDate } = useRoomFilterStore();
+  const { startDate, endDate, setStartDate, setEndDate, isActive } = useFilterStore();
 
   const today = useMemo(nowExcludeTime, []);
 
@@ -85,13 +84,19 @@ export default function SideBarFilterDateItem() {
       <div className="flex flex-col gap-2">
         <section className="flex items-center justify-center gap-3">
           <button className="cursor-pointer p-1.5" onClick={() => setMonth((prev) => prev - 1)}>
-            <ArrowLeft size={20} color="var(--color-classpick-500)" />
+            <ArrowLeft
+              size={20}
+              color={isActive('date') ? 'var(--color-classpick-500)' : colors.neutral['700']}
+            />
           </button>
           <p className="text-sm font-bold text-neutral-700">
             {year}년 {month}월
           </p>
           <button className="cursor-pointer p-1.5" onClick={() => setMonth((prev) => prev + 1)}>
-            <ArrowRight size={20} color="var(--color-classpick-500)" />
+            <ArrowRight
+              size={20}
+              color={isActive('date') ? 'var(--color-classpick-500)' : colors.neutral['700']}
+            />
           </button>
         </section>
 
@@ -106,7 +111,7 @@ export default function SideBarFilterDateItem() {
             <p>토</p>
           </div>
 
-          <div className="grid grid-cols-7 text-center text-xs font-bold text-gray-700">
+          <div className="grid grid-cols-7 text-center text-xs font-bold text-zinc-600">
             {getCalendarDays(year, month).map((day, idx) => (
               <div
                 key={idx}
@@ -153,12 +158,8 @@ export default function SideBarFilterDateItem() {
 
                   const [startDate, endDate] = neareastWeek(new Date(year, month - 1, day));
 
-                  console.log(startDate, endDate);
-
                   setStartDate(startDate);
                   setEndDate(endDate);
-                  setActive((prev) => [...prev, 'people', 'room']);
-                  setOpen('people');
                 }}
               >
                 {day ?? ''}

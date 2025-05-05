@@ -1,23 +1,19 @@
 import SideBarFilterItem from '@/components/side-bar/filter/item/index';
 
-import { useRoomFilterStore } from '@/store/room-filter.store';
+import { useFilterStore } from '@/store/filter.store';
 import { Add, Minus } from 'iconsax-react';
 import colors from 'tailwindcss/colors';
 
 export default function SideBarFilterPeopleItem() {
-  const { people, setPeople } = useRoomFilterStore();
+  const { people, setPeople } = useFilterStore();
 
   return (
     <SideBarFilterItem
       name="people"
-      title="수용인원"
+      title="참석인원"
       value={people}
       labelFormatter={(value) => `${value}명`}
       placeholder="강의실을 이용할 총 인원을 선택해주세요"
-      onActive={() => {
-        if (people) return;
-        setPeople(1);
-      }}
     >
       <div className="my-5 flex items-center justify-center gap-3">
         <button className="cursor-pointer rounded-full border border-zinc-100 p-2">

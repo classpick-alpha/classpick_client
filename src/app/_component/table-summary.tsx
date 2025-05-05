@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useRoomFilterStore } from '@/store/room-filter.store';
+import { useFilterStore } from '@/store/filter.store';
 import { nowExcludeTime } from '@/util';
 import { formatDate } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
@@ -10,7 +10,7 @@ interface TableSummaryProps {
 }
 
 export default function TableSummary({ dates }: TableSummaryProps) {
-  const { startDate, room } = useRoomFilterStore();
+  const { startDate, room } = useFilterStore();
 
   const today = useMemo(nowExcludeTime, []);
 

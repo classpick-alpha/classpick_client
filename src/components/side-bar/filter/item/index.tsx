@@ -1,10 +1,12 @@
-import { ReactNode, useContext, useEffect, useMemo } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
 
 import { FilterItem, sideBarFilterContext } from '@/components/side-bar/filter';
 
+import { useFilterStore } from '@/store/filter.store';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown2, ArrowUp2, Icon } from 'iconsax-react';
 import { twMerge } from 'tailwind-merge';
+import colors from 'tailwindcss/colors';
 
 interface SideBarFilterItemProps<T> {
   name: FilterItem;
@@ -12,7 +14,6 @@ interface SideBarFilterItemProps<T> {
   value: T | undefined;
   labelFormatter?: (value: T) => ReactNode;
   placeholder: string;
-  onActive?: () => void;
   children: ReactNode;
 }
 
@@ -22,23 +23,19 @@ export default function SideBarFilterItem<T>({
   value,
   labelFormatter = (value) => value?.toString(),
   placeholder,
-  onActive,
   children,
 }: SideBarFilterItemProps<T>) {
-  const { open, setOpen, active } = useContext(sideBarFilterContext);
+  const { open, setOpen } = useContext(sideBarFilterContext);
+
+  const { isActive } = useFilterStore();
 
   const OpenIcon = useMemo<Icon>(() => (open === name ? ArrowDown2 : ArrowUp2), [open]);
-
-  useEffect(() => {
-    if (!active.includes(name)) return;
-    onActive?.();
-  }, [active]);
 
   return (
     <div
       className={twMerge(
         'w-[260px] rounded-md bg-white shadow-md',
-        active.includes(name) ? 'border-classpick-300 border' : '',
+        isActive(name) ? 'border-classpick-300 border' : '',
       )}
     >
       <div className="pt-3 pr-6 pb-4 pl-4">
@@ -46,7 +43,7 @@ export default function SideBarFilterItem<T>({
           <p
             className={twMerge(
               'font-bold',
-              active.includes(name) ? 'text-sidebar-filter-title' : 'text-neutral-500',
+              isActive(name) ? 'text-sidebar-filter-title' : 'text-neutral-500',
             )}
           >
             {title}
@@ -55,19 +52,20 @@ export default function SideBarFilterItem<T>({
             <p
               className={twMerge(
                 'text-xs font-bold',
-                active.includes(name) ? 'text-sidebar-filter-description' : 'text-neutral-400',
+                isActive(name) ? 'text-sidebar-filter-description' : 'text-neutral-400',
               )}
             >
               {value ? labelFormatter(value) : placeholder}
             </p>
-            {active.includes(name) && (
-              <OpenIcon
-                size={16}
-                color="var(--color-sidebar-filter-description)"
-                className="cursor-pointer"
-                onClick={() => setOpen(open === name ? undefined : name)}
-              />
-            )}
+
+            <OpenIcon
+              size={16}
+              color={
+                isActive(name) ? 'var(--color-sidebar-filter-description)' : colors.neutral['400']
+              }
+              className="cursor-pointer"
+              onClick={() => setOpen(open === name ? undefined : name)}
+            />
           </div>
         </div>
       </div>
@@ -81,7 +79,7 @@ export default function SideBarFilterItem<T>({
             transition={{ duration: 0.4, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <hr className={active ? 'border-classpick-300' : 'border-neutral-400'} />
+            <hr className={isActive(name) ? 'border-classpick-300' : 'border-neutral-400'} />
             <div className="p-1">{children}</div>
           </motion.div>
         )}
