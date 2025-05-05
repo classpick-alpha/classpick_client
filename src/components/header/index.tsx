@@ -9,6 +9,8 @@ import colors from 'tailwindcss/colors';
 export default function Header() {
   const { user } = useUserStore();
 
+  if (!user) return null;
+
   return (
     <header className="flex h-20 items-center justify-between border-b border-zinc-300 bg-white px-10 md:px-20">
       <section>
@@ -39,14 +41,10 @@ export default function Header() {
           </button>
         </section>
 
-        {user ? (
-          <div className="flex flex-col items-end">
-            <p className="leading-5 text-neutral-700">{user.name}</p>
-            <p className="text-sm text-zinc-500">{user.group}</p>
-          </div>
-        ) : (
-          <p>TODO: 로그인안됨</p>
-        )}
+        <div className="flex flex-col items-end">
+          <p className="leading-5 text-neutral-700">{user.name}</p>
+          <p className="text-sm text-zinc-500">{user.userGroup}</p>
+        </div>
       </div>
 
       <div className="block md:hidden">
