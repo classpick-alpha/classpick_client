@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
 
+import { RedirectType, redirect } from 'next/navigation';
+
 import { nowExcludeTime } from '@/util';
 import { formatDate } from 'date-fns';
+import { MoveLeft } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 interface TableSummaryProps {
@@ -15,11 +18,19 @@ export default function TableSummary({ date, dates, roomName }: TableSummaryProp
 
   return (
     <div className="flex flex-col gap-3 rounded-t-2xl">
-      <div className="flex flex-col gap-2 pt-8 pl-7.5">
-        <div className="text-2xl leading-6 font-extrabold text-neutral-700">
-          {date.getMonth() + 1}월, {date.getFullYear()}년
+      <div className="flex items-center gap-4 pt-8 pl-7.5">
+        <div
+          className="border-classpick-500 h-fit cursor-pointer rounded-full border p-2"
+          onClick={() => redirect('/', RedirectType.push)}
+        >
+          <MoveLeft size={18} color="var(--color-classpick-500)" />
         </div>
-        <div className="text-lg leading-4.5 text-neutral-700">{roomName}</div>
+        <div className="flex flex-col gap-2">
+          <div className="text-2xl leading-6 font-extrabold text-neutral-700">
+            {date.getMonth() + 1}월, {date.getFullYear()}년
+          </div>
+          <div className="text-lg leading-4.5 text-neutral-700">{roomName}</div>
+        </div>
       </div>
 
       <div className="flex">

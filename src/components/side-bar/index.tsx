@@ -12,14 +12,12 @@ export default function SideBar() {
     <div className="h-[calc(100dvh-80px-32px)] min-w-[300px] rounded-2xl bg-white">
       <SideBarMenu />
 
-      {pathname === '/' && (
-        <>
-          <hr className="border-1 border-gray-100" />
+      <hr className="border-1 border-gray-100" />
 
-          <div className="my-2 max-h-[calc(100dvh-80px-32px-156px-16px)] overflow-y-auto">
-            <SideBarFilter />
-          </div>
-        </>
+      {pathname === '/' && (
+        <div className="my-2 max-h-[calc(100dvh-80px-32px-156px-16px)] overflow-y-auto">
+          <SideBarFilter />
+        </div>
       )}
     </div>
   );

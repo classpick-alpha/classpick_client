@@ -43,7 +43,7 @@ export default function TimeTablePage() {
   const [events, setEvents] = useState<EventData[]>(MOCK_EVENT_DATA);
 
   const [date] = useState(new Date());
-  const [roomName] = useState('미래관 323호');
+  const [roomName] = useState('미래관 424호');
 
   const {
     isDragging,
