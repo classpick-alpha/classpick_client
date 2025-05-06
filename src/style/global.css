@@ -1,5 +1,6 @@
-@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css);
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.min.css");
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/work-sans@5.2.5/index.min.css");
 
 @import "tailwindcss";
 
@@ -11,6 +12,8 @@
 
 @layer base {
     * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         @apply scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar scrollbar-w-1.5 scrollbar-thumb-gray-500
     }
 
@@ -86,9 +89,10 @@
 }
 
 @theme {
-    --font-sans: 'NanumSquare', sans-serif;
+    --font-sans: 'Pretendard', sans-serif;
     --font-nanum: 'NanumSquare', sans-serif;
     --font-pretendard: 'Pretendard', sans-serif;
+    --font-work-sans: 'Work Sans', sans-serif;
 
     --color-sidebar-primary: #787486;
     --color-sidebar-primary-hover: #54515e;

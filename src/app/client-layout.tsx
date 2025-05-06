@@ -39,13 +39,18 @@ export default function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     if (!isInit || user) return;
-    if (pathname === '/auth/login') return;
+    if (
+      pathname === '/auth/login' ||
+      pathname === '/auth/callback/success' ||
+      pathname === '/auth/callback/failure'
+    )
+      return;
     redirect('/auth/login');
   }, [isInit]);
 
   useEffect(() => {
     if (!isInit || !user) return;
-    if (user.userGroup && user.schoolNumber && user.phoneNumber) return;
+    if (user.name && user.userGroup && user.schoolNumber && user.phoneNumber) return;
     if (pathname === '/auth/additional-info') return;
     redirect('/auth/additional-info');
   }, [isInit, user, pathname]);
