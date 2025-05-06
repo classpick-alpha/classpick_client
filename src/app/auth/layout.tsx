@@ -19,12 +19,12 @@ export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden">
+    <div className="relative h-[100dvh] w-full overflow-x-clip">
       <TopCloud className="absolute top-0 left-0 w-[700px]" />
       <BottomCloud className="absolute -right-4 bottom-0 w-[700px]" />
 
       <div className="absolute z-10 flex h-full w-full items-center justify-center">
-        <div className="grid grid-cols-2 rounded-2xl bg-white/70">
+        <div className="grid max-w-[1200px] grid-cols-2 rounded-2xl bg-white/70">
           <section
             className="m-2 flex flex-col gap-18 rounded-2xl px-6 py-9"
             style={{
@@ -40,7 +40,7 @@ export default function Layout({ children }: LayoutProps) {
               <p>뒤로 돌아가기</p>
             </div>
 
-            <div className="flex flex-col gap-10 px-10">
+            <div className="flex flex-col gap-10 px-8">
               <h1 className="font-nanum text-3xl leading-12 font-extrabold text-white">
                 카페 도서관 눈치게임은 그만,
                 <br />

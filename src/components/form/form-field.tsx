@@ -17,7 +17,7 @@ export function FormField({
   ...props
 }: FormFieldProps) {
   return (
-    <div className={twMerge('flex flex-col gap-1', className)} {...props}>
+    <div className={twMerge('flex w-full flex-col gap-1', className)} {...props}>
       <p className="subtitle2-pretendard flex items-start text-stone-700">
         {label}
         {required && <span className="text-system-alarm">*</span>}

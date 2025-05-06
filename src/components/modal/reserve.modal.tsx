@@ -128,20 +128,21 @@ export default function ReserveModal({
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-4">
           <FormField label="신청자명">
-            <Input value={user.schoolNumber} readOnly />
-            <Input value={user.name} readOnly />
+            <Input variant="modal" value={user.schoolNumber} disabled />
+            <Input variant="modal" value={user.name} disabled />
           </FormField>
 
           <FormField label="이메일">
-            <Input value={user.email} readOnly />
+            <Input variant="modal" value={user.email} disabled />
           </FormField>
 
           <FormField label="연락처">
-            <Input value={user.phoneNumber} readOnly />
+            <Input variant="modal" value={user.phoneNumber} disabled />
           </FormField>
 
           <FormField label="참석인원" error={form.formState.errors.people?.message}>
             <Input
+              variant="modal"
               type="number"
               {...form.register('people', { valueAsNumber: true })}
               suffix="명"
@@ -149,18 +150,18 @@ export default function ReserveModal({
           </FormField>
 
           <FormField label="날짜">
-            <Input value={format(date, 'yyyy.MM.dd E', { locale: ko })} readOnly />
+            <Input variant="modal" value={format(date, 'yyyy.MM.dd E', { locale: ko })} disabled />
           </FormField>
 
           <FormField label="시간">
-            <Input value={format(startTime, 'HH:mm')} readOnly />
+            <Input variant="modal" value={format(startTime, 'HH:mm')} disabled />
             <span className="subtitle2-pretendard text-neutral-400">부터</span>
-            <Input value={format(endTime, 'HH:mm')} readOnly />
+            <Input variant="modal" value={format(endTime, 'HH:mm')} disabled />
             <span className="subtitle2-pretendard text-neutral-400">까지</span>
           </FormField>
 
           <FormField label="장소">
-            <Input value={`${room.placeName} ${room.unitNumber}`} readOnly />
+            <Input variant="modal" value={`${room.placeName} ${room.unitNumber}`} disabled />
           </FormField>
 
           <hr className="col-span-2 -mx-7 w-[494px] text-indigo-50" />

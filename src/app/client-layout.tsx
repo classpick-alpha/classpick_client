@@ -9,9 +9,17 @@ import ModalContainer from '@/components/modal-container';
 import SideBar from '@/components/side-bar';
 
 import Api from '@/api';
+import { UserResponse } from '@/api/dto/user';
 import { useInitStore } from '@/store/init.store';
 import { useUserStore } from '@/store/user.store';
 import { Toaster } from 'sonner';
+
+export const ADDITIONAL_INFO: (keyof UserResponse)[] = [
+  'name',
+  'userGroup',
+  'schoolNumber',
+  'phoneNumber',
+];
 
 interface LayoutProps {
   children: ReactNode;
@@ -50,7 +58,7 @@ export default function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     if (!isInit || !user) return;
-    if (user.name && user.userGroup && user.schoolNumber && user.phoneNumber) return;
+    if (ADDITIONAL_INFO.every((key) => user[key])) return;
     if (pathname === '/auth/additional-info') return;
     redirect('/auth/additional-info');
   }, [isInit, user, pathname]);
