@@ -58,8 +58,8 @@ export default function Page() {
                 <Image
                   src={room.image}
                   alt={room.roomId.toString()}
-                  width={512}
-                  height={512}
+                  width={300}
+                  height={200}
                   className="h-[200px] rounded-xl object-cover"
                 />
               ) : (

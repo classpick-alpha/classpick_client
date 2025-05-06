@@ -117,7 +117,7 @@ export default function Page() {
               {...form.register('phoneNumber', {
                 onChange: (e) => {
                   const rawValue = e.target.value.replace(/[^0-9]/g, '');
-                  let formatted = rawValue;
+                  let formatted: string;
 
                   if (rawValue.length < 4) {
                     formatted = rawValue;

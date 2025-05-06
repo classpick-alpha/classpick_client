@@ -18,7 +18,7 @@ export function useApi(): [
   async function start(func: () => Promise<unknown>) {
     setPending(true);
     func()
-      .catch((e) => toast.error(e.message))
+      .catch((e) => e.message !== 'Failed to fetch' && toast.error(e.message))
       .finally(() => setPending(false));
   }
 
