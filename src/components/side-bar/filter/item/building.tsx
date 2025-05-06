@@ -5,13 +5,13 @@ import { useFilterStore } from '@/store/filter.store';
 import { twMerge } from 'tailwind-merge';
 
 export default function SideBarFilterBuildingItem() {
-  const { building, setBuilding, isActive } = useFilterStore();
+  const { placeName, setPlaceName, isActive } = useFilterStore();
 
   return (
     <SideBarFilterItem
       name="building"
       title="건물"
-      value={building}
+      value={placeName}
       placeholder="예약할 강의실의 건물을 선택해주세요"
     >
       <div
@@ -25,9 +25,9 @@ export default function SideBarFilterBuildingItem() {
             key={loopedBuilding}
             className={twMerge(
               'cursor-pointer py-2 text-sm',
-              building === loopedBuilding ? 'text-classpick-500' : 'text-zinc-600',
+              placeName === loopedBuilding ? 'text-classpick-500' : 'text-zinc-600',
             )}
-            onClick={() => setBuilding(loopedBuilding)}
+            onClick={() => setPlaceName(placeName === loopedBuilding ? undefined : loopedBuilding)}
           >
             {loopedBuilding}
           </p>

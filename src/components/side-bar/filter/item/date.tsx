@@ -4,20 +4,19 @@ import SideBarFilterItem from '@/components/side-bar/filter/item/index';
 
 import { useFilterStore } from '@/store/filter.store';
 import { nowExcludeTime } from '@/util';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { ArrowLeft, ArrowRight } from 'iconsax-react';
 import { twMerge } from 'tailwind-merge';
 import colors from 'tailwindcss/colors';
 
 export default function SideBarFilterDateItem() {
-  const { startDate, endDate, setStartDate, setEndDate, isActive } = useFilterStore();
+  const { date, setDate, isActive } = useFilterStore();
 
   const today = useMemo(nowExcludeTime, []);
 
   const [year, setYear] = useState<number>(today.getFullYear());
   const [month, setMonth] = useState<number>(today.getMonth() + 1);
-
-  const neareastWeek = useCallback((date: Date): [Date, Date] => {
+  useCallback((date: Date): [Date, Date] => {
     let startDate = new Date(date);
 
     if (startDate.getDay() === 6) {
@@ -73,12 +72,8 @@ export default function SideBarFilterDateItem() {
     <SideBarFilterItem
       name="date"
       title="예약일자"
-      value={startDate && endDate ? [startDate, endDate] : undefined}
-      labelFormatter={([startDate, endDate]) =>
-        startDate && endDate
-          ? `${format(startDate!, 'M월 d일')} ~ ${format(endDate!, 'M월 d일')}`
-          : ''
-      }
+      value={date}
+      labelFormatter={(date) => format(date!, 'M월 d일')}
       placeholder="강의실 예약할 일자를 선택해주세요"
     >
       <div className="flex flex-col gap-2">
@@ -117,49 +112,23 @@ export default function SideBarFilterDateItem() {
                 key={idx}
                 className={twMerge(
                   'flex size-9 items-center justify-center',
-
                   day
                     ? 'hover:bg-classpick-50 cursor-pointer hover:rounded-full'
                     : 'text-transparent',
-
-                  startDate &&
-                    endDate &&
+                  date &&
                     day &&
                     twMerge(
-                      startDate.getFullYear() === year &&
-                        startDate.getMonth() + 1 === month &&
-                        startDate.getDate() <= day &&
-                        (endDate.getFullYear() === year && endDate.getMonth() + 1 === month
-                          ? day <= endDate.getDate()
-                          : true) &&
-                        'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none',
-
-                      endDate.getFullYear() === year &&
-                        endDate.getMonth() + 1 === month &&
-                        day <= endDate.getDate() &&
-                        (startDate.getFullYear() === year && startDate.getMonth() + 1 === month
-                          ? startDate.getDate() <= day
-                          : true) &&
-                        'bg-classpick-500 hover:bg-classpick-500 text-white hover:rounded-none',
-
-                      year === startDate.getFullYear() &&
-                        month === startDate.getMonth() + 1 &&
-                        day === startDate.getDate() &&
-                        'rounded-l-full hover:rounded-l-full',
-
-                      year === endDate.getFullYear() &&
-                        month === endDate.getMonth() + 1 &&
-                        day === endDate.getDate() &&
-                        'rounded-r-full hover:rounded-r-full',
+                      date.getFullYear() === year &&
+                        date.getMonth() + 1 === month &&
+                        date.getDate() === day &&
+                        'bg-classpick-500 hover:bg-classpick-500 rounded-full text-white',
                     ),
                 )}
                 onClick={() => {
                   if (!day) return;
-
-                  const [startDate, endDate] = neareastWeek(new Date(year, month - 1, day));
-
-                  setStartDate(startDate);
-                  setEndDate(endDate);
+                  const d = new Date(year, month - 1, day);
+                  if (d.getDay() === 0 || d.getDay() === 6) return;
+                  setDate(date && isSameDay(date, d) ? undefined : d);
                 }}
               >
                 {day ?? ''}

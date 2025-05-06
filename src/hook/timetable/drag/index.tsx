@@ -1,23 +1,35 @@
 import { Dispatch, MouseEvent, SetStateAction, useCallback, useState } from 'react';
 
 import { splitMinute } from '@/app/[id]/_config';
-import { EventData } from '@/app/[id]/page';
+
+import ReserveModal from '@/components/modal/reserve.modal';
+
+import { DailyReservation, RoomResponse } from '@/api/dto/room';
+import { useModalStore } from '@/store/modal.store';
+import { isSameDay, parse } from 'date-fns';
 
 interface useTimetableDragProps {
-  events: EventData[];
-  setEvents: Dispatch<SetStateAction<EventData[]>>;
+  room?: RoomResponse;
+  timeTable: DailyReservation[];
+  setTimeTable: Dispatch<SetStateAction<DailyReservation[]>>;
 }
-export default function useTimetableDrag({ events, setEvents }: useTimetableDragProps) {
+export default function useTimetableDrag({ room, timeTable, setTimeTable }: useTimetableDragProps) {
+  const { openModal } = useModalStore();
+
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState<Date>();
   const [dragEnd, setDragEnd] = useState<Date>();
 
   const isOccupied = useCallback(
     (date: Date) =>
-      events.some(
-        (event) => event.start.getTime() <= date.getTime() && date.getTime() < event.end.getTime(),
-      ),
-    [events],
+      !!timeTable
+        .find((reservation) => isSameDay(parse(reservation.date, 'yyyy-MM-dd', new Date()), date))
+        ?.reservations.some(
+          (reservation) =>
+            parse(reservation.startTime, 'HH:mm', new Date()).getTime() <= date.getTime() &&
+            date.getTime() < parse(reservation.endTime, 'HH:mm', new Date()).getTime(),
+        ),
+    [timeTable],
   );
 
   const handleDragStart = useCallback((e: MouseEvent, date: Date) => {
@@ -75,14 +87,15 @@ export default function useTimetableDrag({ events, setEvents }: useTimetableDrag
         }
       }
 
-      setEvents((prev) => [
-        ...prev,
-        {
-          start: dragStart,
-          end: dragEnd,
-          status: 'pending',
-        },
-      ]);
+      openModal(
+        <ReserveModal
+          room={room!}
+          date={dragStart}
+          startTime={dragStart}
+          endTime={dragEnd}
+          setTimeTable={setTimeTable}
+        />,
+      );
 
       setIsDragging(false);
       setDragStart(undefined);

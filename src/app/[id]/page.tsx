@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { use, useCallback, useEffect, useMemo, useState } from 'react';
 
 import TableBlock from '@/app/[id]/_component/table-block';
 import TableContainer from '@/app/[id]/_component/table-container';
@@ -11,39 +11,28 @@ import TableReservedBox from '@/app/[id]/_component/table-reserved-box';
 import TableSummary from '@/app/[id]/_component/table-summary';
 import { startHour } from '@/app/[id]/_config';
 
+import Api from '@/api';
+import { Status } from '@/api/dto/reservation';
+import { DailyReservation, RoomResponse } from '@/api/dto/room';
 import useTimetableDrag from '@/hook/timetable/drag';
-import { addDays, eachDayOfInterval } from 'date-fns';
+import { useApi } from '@/hook/use-api';
+import { useFilterStore } from '@/store/filter.store';
+import { eachDayOfInterval, endOfWeek, format, isSameDay, parse, startOfWeek } from 'date-fns';
 
-export interface EventData {
-  start: Date;
-  end: Date;
-  status: 'pending' | 'reserved';
-  user?: {
-    name: string;
-  };
+interface Props {
+  params: Promise<{ id: string }>;
 }
 
-const MOCK_EVENT_DATA: EventData[] = [
-  {
-    start: new Date(2025, 3, 7, 10, 20, 0, 0),
-    end: new Date(2025, 3, 7, 12, 0, 0, 0),
-    status: 'reserved',
-    user: {
-      name: '손대현',
-    },
-  },
-  {
-    start: new Date(2025, 3, 8, 13, 0, 0, 0),
-    end: new Date(2025, 3, 8, 15, 0, 0, 0),
-    status: 'pending',
-  },
-];
+export default function Page({ params }: Props) {
+  const { id: roomId } = use(params);
 
-export default function TimeTablePage() {
-  const [events, setEvents] = useState<EventData[]>(MOCK_EVENT_DATA);
+  const [isApiProcessing, startApi] = useApi();
 
-  const [date] = useState(new Date());
-  const [roomName] = useState('미래관 424호');
+  const [room, setRoom] = useState<RoomResponse>();
+  const [timeTable, setTimeTable] = useState<DailyReservation[]>([]);
+
+  const { date: _date } = useFilterStore();
+  const date = useMemo(() => _date || new Date(), [_date]);
 
   const {
     isDragging,
@@ -53,14 +42,14 @@ export default function TimeTablePage() {
     handleDragging,
     handleDragEnd,
     isOccupied,
-  } = useTimetableDrag({ events, setEvents });
+  } = useTimetableDrag({ room, timeTable, setTimeTable });
 
   const dates = useMemo(
     () =>
       eachDayOfInterval({
-        start: date,
-        end: addDays(date, 4),
-      }),
+        start: startOfWeek(date, { weekStartsOn: 1 }),
+        end: endOfWeek(date, { weekStartsOn: 1 }),
+      }).slice(0, 5),
     [date],
   );
 
@@ -69,9 +58,22 @@ export default function TimeTablePage() {
     [],
   );
 
+  useEffect(() => {
+    startApi(async () => {
+      const { room, weekly } = await Api.Domain.Room.getRoomTimeTable(
+        roomId,
+        format(date, 'yyyy-MM-dd'),
+      );
+      setRoom(room);
+      setTimeTable(weekly);
+    });
+  }, [roomId, date]);
+
+  if (isApiProcessing || !room || !timeTable) return null;
+
   return (
     <div className="flex max-h-[calc(100dvh-80px-32px)] w-full flex-col rounded-2xl bg-white p-4">
-      <TableSummary date={date} dates={dates} roomName={roomName} />
+      <TableSummary date={date} dates={dates} room={room} />
       <TableContainer handleDragEnd={handleDragEnd}>
         {dates.map((date) => (
           <div key={date.getTime()} className="relative">
@@ -92,16 +94,18 @@ export default function TimeTablePage() {
               dragEnd={dragEnd}
             />
 
-            {events
-              .filter((event) => event.start.getDay() === date.getDay())
-              .map((event) => {
-                const startOffset = dateToSlot(event.start);
-                const endOffset = dateToSlot(event.end);
+            {timeTable
+              .find((reservation) =>
+                isSameDay(parse(reservation.date, 'yyyy-MM-dd', new Date()), date),
+              )
+              ?.reservations.map((reservation) => {
+                const startOffset = dateToSlot(parse(reservation.startTime, 'HH:mm', new Date()));
+                const endOffset = dateToSlot(parse(reservation.endTime, 'HH:mm', new Date()));
 
-                if (event.status === 'pending') {
+                if (reservation.status === Status.REQUESTED) {
                   return (
                     <TablePendingBox
-                      key={event.start.getTime()}
+                      key={reservation.startTime}
                       startOffset={startOffset}
                       endOffset={endOffset}
                     />
@@ -109,8 +113,8 @@ export default function TimeTablePage() {
                 } else {
                   return (
                     <TableReservedBox
-                      key={event.start.getTime()}
-                      event={event}
+                      key={reservation.endTime}
+                      reservation={reservation}
                       startOffset={startOffset}
                       endOffset={endOffset}
                     />

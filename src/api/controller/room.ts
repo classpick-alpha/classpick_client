@@ -5,7 +5,6 @@ export default class Room {
   constructor(private readonly request: ApiRequest) {}
 
   public async getRooms(
-    userId: number,
     placeName?: string,
     capacity?: number,
     date?: string,
@@ -22,10 +21,10 @@ export default class Room {
     return this.request.get(`/v0.0/rooms?${searchParams}`);
   }
 
-  public async getRoomTimeTable(roomId: number, date: string): Promise<RoomTimeTableResponse> {
+  public async getRoomTimeTable(roomId: string, date: string): Promise<RoomTimeTableResponse> {
     const searchParams = new URLSearchParams();
     searchParams.append('date', date);
 
-    return this.request.get(`/v0.0/rooms/${roomId}${searchParams}`);
+    return this.request.get(`/v0.0/rooms/${roomId}?${searchParams}`);
   }
 }

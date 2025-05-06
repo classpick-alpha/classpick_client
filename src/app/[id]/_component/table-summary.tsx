@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { RedirectType, redirect } from 'next/navigation';
 
+import { RoomResponse } from '@/api/dto/room';
 import { nowExcludeTime } from '@/util';
 import { formatDate } from 'date-fns';
 import { MoveLeft } from 'lucide-react';
@@ -10,10 +11,10 @@ import { twMerge } from 'tailwind-merge';
 interface TableSummaryProps {
   date: Date;
   dates: Date[];
-  roomName: string;
+  room: RoomResponse;
 }
 
-export default function TableSummary({ date, dates, roomName }: TableSummaryProps) {
+export default function TableSummary({ date, dates, room }: TableSummaryProps) {
   const today = useMemo(nowExcludeTime, []);
 
   return (
@@ -29,7 +30,9 @@ export default function TableSummary({ date, dates, roomName }: TableSummaryProp
           <div className="text-2xl leading-6 font-extrabold text-neutral-700">
             {date.getMonth() + 1}월, {date.getFullYear()}년
           </div>
-          <div className="text-lg leading-4.5 text-neutral-700">{roomName}</div>
+          <div className="text-lg leading-4.5 text-neutral-700">
+            {room.placeName} {room.unitNumber}
+          </div>
         </div>
       </div>
 

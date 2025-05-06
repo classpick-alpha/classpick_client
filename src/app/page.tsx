@@ -1,32 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
+import Api from '@/api';
+import { RoomResponse } from '@/api/dto/room';
+import { useApi } from '@/hook/use-api';
+import { useFilterStore } from '@/store/filter.store';
+import { format } from 'date-fns';
 import { MoveUpRight } from 'lucide-react';
 
-interface RoomType {
-  roomId: number;
-  roomName: string;
-  image: string;
-  capacity: number;
-  roomType: string;
-}
-
-const MOCK_ROOM_DATE: RoomType[] = [
-  {
-    roomId: 1,
-    roomName: '미래관 424호',
-    image: 'https://i.imgur.com/Wd55yWI.png',
-    capacity: 40,
-    roomType: '강의실',
-  },
-];
-
 export default function Page() {
-  const [rooms] = useState<RoomType[]>(MOCK_ROOM_DATE);
+  const [, startApi] = useApi();
+
+  const [rooms, setRooms] = useState<RoomResponse[]>([]);
+
+  const { placeName, capacity, date, startTime, endTime } = useFilterStore();
+
+  useEffect(() => {
+    startApi(async () => {
+      const { rooms } = await Api.Domain.Room.getRooms(
+        placeName,
+        capacity,
+        date ? format(date, 'yyyy-MM-dd') : undefined,
+        startTime ? format(startTime, 'HH:mm') : undefined,
+        endTime ? format(endTime, 'HH:mm') : undefined,
+      );
+      setRooms(rooms);
+    });
+  }, [placeName, capacity, date, startTime, endTime]);
 
   return (
     <div
@@ -50,24 +54,35 @@ export default function Page() {
             className="flex flex-col rounded-xl bg-white/80 p-2 shadow-lg"
           >
             <div className="relative">
-              <Image
-                src={room.image}
-                alt={room.roomName}
-                width={512}
-                height={512}
-                className="h-[200px] rounded-xl object-cover"
-              />
+              {room.image ? (
+                <Image
+                  src={room.image}
+                  alt={room.roomId.toString()}
+                  width={512}
+                  height={512}
+                  className="h-[200px] rounded-xl object-cover"
+                />
+              ) : (
+                <div className="bg-primary-gray-400 h-[200px] rounded-xl" />
+              )}
+
               <div className="absolute bottom-0 left-0 z-10 h-[50px] w-full bg-linear-to-b from-transparent to-white" />
               <div className="absolute bottom-2 left-2 z-20 flex gap-4">
-                <p className="caption1-pretendard rounded-full bg-white/70 px-2 py-1">
-                  수용인원 {room.capacity}명
-                </p>
+                {room.capacity && (
+                  <p className="caption1-pretendard rounded-full bg-white/70 px-2 py-1">
+                    수용인원 {room.capacity}명
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex justify-between p-3">
               <div className="flex flex-col">
-                <p className="subtitle1-nanum text-primary-gray-600">{room.roomName}</p>
-                <p className="body1-nanum text-sidebar-primary">{room.roomType}</p>
+                <p className="subtitle1-nanum text-primary-gray-600">
+                  {room.placeName} {room.unitNumber}
+                </p>
+                <p className="body1-nanum text-sidebar-primary">
+                  {room.placeName} {room.unitNumber}
+                </p>
               </div>
               <div className="border-primary-gray-500 h-fit rounded-full border p-1">
                 <MoveUpRight size={14} color="var(--color-primary-gray-500)" />

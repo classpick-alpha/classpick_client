@@ -1,19 +1,100 @@
+import { Dispatch, SetStateAction, useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
 import Button from '@/components/button';
 import { FormField } from '@/components/form/form-field';
 import { Input } from '@/components/form/input';
 import { TextAreaInput } from '@/components/form/text-area-input';
 import GridIconModal from '@/components/modal-container/grid-icon-modal';
+import ReserveSuccessModal from '@/components/modal/reserve-success.modal';
 
+import Api from '@/api';
+import { CreateReservationRequest, CreateReservationRequestSchema } from '@/api/dto/reservation';
+import { DailyReservation, RoomResponse } from '@/api/dto/room';
+import { useApiWithToast } from '@/hook/use-api';
+import { useFilterStore } from '@/store/filter.store';
 import { useModalStore } from '@/store/modal.store';
 import { useUserStore } from '@/store/user.store';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ChecklistIcon } from '@primer/octicons-react';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { Message, TickCircle } from 'iconsax-react';
 import { Forward } from 'lucide-react';
 
-export default function ReserveModal() {
-  const { closeModal } = useModalStore();
+interface ReserveModalProps {
+  room: RoomResponse;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
+  setTimeTable: Dispatch<SetStateAction<DailyReservation[]>>;
+}
 
+export default function ReserveModal({
+  room,
+  date,
+  startTime,
+  endTime,
+  setTimeTable,
+}: ReserveModalProps) {
+  const { openModal } = useModalStore();
   const { user } = useUserStore();
+  const { capacity } = useFilterStore();
+
+  const [isApiProcessing, startApi] = useApiWithToast();
+
+  const form = useForm<CreateReservationRequest>({
+    resolver: zodResolver(CreateReservationRequestSchema),
+    defaultValues: {
+      people: capacity || 1,
+      date: format(date, 'yyyy-MM-dd'),
+      startTime: format(startTime, 'HH:mm'),
+      endTime: format(endTime, 'HH:mm'),
+      purpose: '',
+      comment: '',
+    },
+  });
+
+  const onSubmit: SubmitHandler<CreateReservationRequest> = useCallback(
+    (body) => {
+      startApi(
+        async () => {
+          const { date, startTime, endTime, status } =
+            await Api.Domain.Reservation.createReservation(room.roomId, body);
+
+          setTimeTable((prev) => {
+            const find = prev.find((reservation) => reservation.date === date);
+
+            if (find) {
+              return [
+                ...prev.filter((reservation) => reservation.date !== date),
+                {
+                  date: find.date,
+                  reservations: [
+                    ...find.reservations,
+                    {
+                      startTime,
+                      endTime,
+                      status,
+                    },
+                  ],
+                },
+              ];
+            } else {
+              return [...prev, { date, reservations: [{ startTime, endTime, status }] }];
+            }
+          });
+
+          openModal(<ReserveSuccessModal />);
+        },
+        {
+          loading: '강의실을 예약하고 있습니다.',
+          success: '강의실을 예약했습니다.',
+        },
+      );
+    },
+    [room],
+  );
 
   if (!user) return null;
 
@@ -25,11 +106,12 @@ export default function ReserveModal() {
       description="잘못 신청하더라도 언제든지 취소할 수 있어요."
       buttons={
         <>
-          <Button onClick={closeModal}>
+          <Button disabled={isApiProcessing} onClick={form.handleSubmit(onSubmit)}>
             <TickCircle size={18} color="white" variant="Bold" />
             확인했어요
           </Button>
-          <Button variant="white" onClick={closeModal} className="w-auto min-w-fit">
+          {/* TODO: 공유하기를 누르면 어떤 일이 일어나나요 */}
+          <Button variant="white" className="w-auto min-w-fit">
             <Forward size={18} color="var(--color-classpick-500)" />
             공유하기
           </Button>
@@ -58,33 +140,52 @@ export default function ReserveModal() {
             <Input value={user.phoneNumber} readOnly />
           </FormField>
 
-          <FormField label="참석인원">
-            <Input defaultValue={1} type="number" suffix="명" />
+          <FormField label="참석인원" error={form.formState.errors.people?.message}>
+            <Input
+              type="number"
+              {...form.register('people', { valueAsNumber: true })}
+              suffix="명"
+            />
           </FormField>
 
           <FormField label="날짜">
-            <Input value="2025.04.10 목" readOnly />
+            <Input value={format(date, 'yyyy.MM.dd E', { locale: ko })} readOnly />
           </FormField>
 
           <FormField label="시간">
-            <Input value="14:00" readOnly />
+            <Input value={format(startTime, 'HH:mm')} readOnly />
             <span className="subtitle2-pretendard text-neutral-400">부터</span>
-            <Input value="16:00" readOnly />
+            <Input value={format(endTime, 'HH:mm')} readOnly />
             <span className="subtitle2-pretendard text-neutral-400">까지</span>
           </FormField>
 
           <FormField label="장소">
-            <Input value="미래관 1층 2호실" readOnly />
+            <Input value={`${room.placeName} ${room.unitNumber}`} readOnly />
           </FormField>
 
           <hr className="col-span-2 -mx-7 w-[494px] text-indigo-50" />
 
-          <FormField label="사용목적" className="col-span-2" required>
-            <TextAreaInput placeholder="강의실 사용 목적을 적어주세요" />
+          <FormField
+            label="사용목적"
+            className="col-span-2"
+            required
+            error={form.formState.errors.purpose?.message}
+          >
+            <TextAreaInput
+              placeholder="강의실 사용 목적을 적어주세요"
+              {...form.register('purpose')}
+            />
           </FormField>
 
-          <FormField label="요구사항" className="col-span-2">
-            <TextAreaInput placeholder="예약시 요구사항이 있다면 적어주세요" />
+          <FormField
+            label="요구사항"
+            className="col-span-2"
+            error={form.formState.errors.comment?.message}
+          >
+            <TextAreaInput
+              placeholder="예약시 요구사항이 있다면 적어주세요"
+              {...form.register('comment')}
+            />
           </FormField>
         </div>
       </div>

@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        // TODO: API 연결 후 S3 호스트로 수정
-        hostname: 'i.imgur.com',
+        protocol: 'https',
+        hostname: 'classpick.s3.ap-northeast-2.amazonaws.com',
       },
     ],
   },

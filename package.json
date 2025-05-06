@@ -9,6 +9,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@primer/octicons-react": "^19.15.1",
     "@tailwindcss/postcss": "^4.0.16",
     "date-fns": "^4.1.0",
@@ -19,6 +20,7 @@
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.2",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.1.0",
     "tailwind-scrollbar": "^4.0.2",

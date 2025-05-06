@@ -1,6 +1,7 @@
 import ApiResponse from '@/api/dto/common';
 import { UserResponse } from '@/api/dto/user';
 import { useUserStore } from '@/store/user.store';
+import { format } from 'date-fns';
 
 export default class ApiRequest {
   private readonly baseUrl?: string;
@@ -98,7 +99,7 @@ export default class ApiRequest {
     }
 
     return JSON.stringify({
-      timestamp: new Date().toISOString(),
+      timestamp: format(new Date(), 'yyyy-MM-dd HH:mm'),
       data: body,
     });
   }
