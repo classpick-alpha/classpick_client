@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { pxPerMinute, startHour } from '@/app/[id]/_config';
+import { endHour, pxPerMinute, startHour } from '@/app/[id]/_config';
 
 import { now, nowExcludeTime } from '@/util';
+import { getHours } from 'date-fns';
 
 interface TableCurrentBarProps {
   date: Date;
@@ -23,6 +24,8 @@ export default function TableCurrentBar({ date }: TableCurrentBarProps) {
   }, []);
 
   if (date.getTime() !== nowExcludeTime().getTime()) return null;
+
+  if (getHours(current) < startHour || getHours(current) >= endHour) return null;
 
   return (
     <hr
