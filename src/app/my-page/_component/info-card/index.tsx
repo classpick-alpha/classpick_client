@@ -44,6 +44,7 @@ export default function InfoCard({ reservations }: InfoCardProps) {
 
         <button className="border-classpick-400 flex cursor-pointer items-center gap-1 rounded-sm border bg-gray-50 px-3 py-1">
           <Headphones color="var(--color-classpick-400)" size={20} />
+          {/*TODO: 누르면 어떤 일이 일어나나요?*/}
           <p className="body2-nanum text-classpick-400">담당자 연결</p>
         </button>
       </section>

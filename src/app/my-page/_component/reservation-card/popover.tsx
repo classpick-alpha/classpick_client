@@ -7,16 +7,13 @@ export function Popover() {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div
-      className="relative flex-1"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="relative flex-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        fill="none"
-        className="size-6 cursor-pointer"
+        className="size-6"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         <path
           d="M2 12.9385C2 8.22443 2 5.86741 3.46447 4.40294C4.92893 2.93848 7.28595 2.93848 12 2.93848C16.714 2.93848 19.0711 2.93848 20.5355 4.40294C22 5.86741 22 8.22443 22 12.9385C22 17.6525 22 20.0095 20.5355 21.474C19.0711 22.9385 16.714 22.9385 12 22.9385C7.28595 22.9385 4.92893 22.9385 3.46447 21.474C2 20.0095 2 17.6525 2 12.9385Z"
@@ -34,7 +31,7 @@ export function Popover() {
       </svg>
       <div
         className={twMerge(
-          'absolute bottom-0 left-8 z-20 flex w-fit translate-y-1/2 flex-col gap-3 rounded-lg bg-gray-800 px-2 py-3 text-sm text-white',
+          'absolute bottom-0 left-9 z-20 flex w-fit translate-y-1/2 flex-col gap-3 rounded-lg bg-gray-800 px-2 py-3 text-sm text-white',
           !isHovered && 'hidden',
         )}
       >
@@ -52,7 +49,7 @@ export function Popover() {
       </div>
       <div
         className={twMerge(
-          'absolute top-1 left-7 z-10 size-4 rotate-45 bg-gray-800',
+          'absolute top-1 left-8 z-10 size-4 rotate-45 bg-gray-800',
           !isHovered && 'hidden',
         )}
       />

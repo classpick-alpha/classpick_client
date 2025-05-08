@@ -22,7 +22,7 @@ export default function GridIconModal({
   buttons,
 }: GridIconModalProps) {
   return (
-    <div className="relative h-full overflow-hidden bg-gray-50" style={{ width }}>
+    <div className="relative h-full bg-gray-50" style={{ width }}>
       <div className="absolute inset-0 z-0">
         <div
           className="pointer-events-none absolute top-[-20%] left-1/2 h-[100%] w-[200%] -translate-x-1/2 opacity-50"
@@ -63,7 +63,7 @@ export default function GridIconModal({
         </section>
 
         {children && (
-          <section className="w-[calc(100%-56px)] rounded-2xl bg-white p-6 shadow-xs">
+          <section className="scrollbar-none max-h-[calc(100dvh-360px)] w-[calc(100%-56px)] overflow-y-auto rounded-2xl bg-white p-6 shadow-xs">
             {children}
           </section>
         )}

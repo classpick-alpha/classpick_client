@@ -24,7 +24,7 @@ export default function ModalContainer() {
   return (
     <div className="fixed inset-0 z-90 bg-black/50" onClick={closeModal}>
       <div
-        className="relative top-1/2 left-1/2 max-h-[90dvh] w-fit -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-3xl bg-white"
+        className="relative top-1/2 left-1/2 w-fit -translate-x-1/2 -translate-y-1/2 overflow-clip rounded-2xl bg-white"
         onClick={(e) => e.stopPropagation()}
       >
         <button

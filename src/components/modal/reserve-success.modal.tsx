@@ -28,7 +28,7 @@ export default function ReserveSuccessModal() {
         animate={{ scale: 1 }}
         className="absolute z-10 h-full w-full"
       >
-        <Image src={ConfettiImage} alt="confetti" fill />
+        <Image src={ConfettiImage} alt="confetti" fill priority />
       </motion.div>
 
       <div className="relative z-10 flex flex-col items-center justify-center gap-6 pt-9 pb-4">

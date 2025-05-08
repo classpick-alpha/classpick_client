@@ -14,7 +14,7 @@
     * {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        @apply scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar scrollbar-w-1.5 scrollbar-thumb-gray-500
+        @apply scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar scrollbar-w-1.5 scrollbar-thumb-gray-500 scrollbar-h-1.5;
     }
 
     body {

@@ -12,6 +12,7 @@ import Api from '@/api';
 import { UserResponse } from '@/api/dto/user';
 import { useInitStore } from '@/store/init.store';
 import { useUserStore } from '@/store/user.store';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'sonner';
 
 export const ADDITIONAL_INFO: (keyof UserResponse)[] = [
@@ -70,16 +71,16 @@ export default function Layout({ children }: LayoutProps) {
       {pathname.startsWith('/auth') ? (
         children
       ) : (
-        <>
+        <NuqsAdapter>
           <Header />
           <main className="flex gap-3.5 p-4">
             <SideBar />
             {children}
           </main>
-        </>
+        </NuqsAdapter>
       )}
       <ModalContainer />
-      <Toaster />
+      <Toaster className="font-sans" />
     </>
   );
 }

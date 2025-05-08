@@ -19,7 +19,14 @@ export default function Page() {
 
       <Link href={process.env.NEXT_PUBLIC_API_URL + '/api/oauth2/authorization/google'}>
         <Button variant="white" className="border-classpick-300 border-2 hover:bg-neutral-50">
-          <Image src={GoogleIcon} alt="google" width={24} height={24} className="size-[24px]" />
+          <Image
+            src={GoogleIcon}
+            alt="google"
+            width={24}
+            height={24}
+            className="size-[24px]"
+            priority
+          />
         </Button>
       </Link>
 
