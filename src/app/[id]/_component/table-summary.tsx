@@ -20,12 +20,12 @@ export default function TableSummary({ date, dates, room }: TableSummaryProps) {
   return (
     <div className="flex flex-col gap-3 rounded-t-2xl">
       <div className="flex items-center gap-4 pt-8 pl-7.5">
-        <div
+        <button
           className="border-classpick-500 h-fit cursor-pointer rounded-full border p-2"
           onClick={() => redirect('/', RedirectType.push)}
         >
           <MoveLeft size={18} color="var(--color-classpick-500)" />
-        </div>
+        </button>
         <div className="flex flex-col gap-2">
           <div className="text-2xl leading-6 font-extrabold text-neutral-700">
             {date.getMonth() + 1}월, {date.getFullYear()}년

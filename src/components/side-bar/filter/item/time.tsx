@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import SideBarFilterItem from '@/components/side-bar/filter/item/index';
 
 import { useFilterStore } from '@/store/filter.store';
-import { addMinutes, format, isAfter, isBefore, isEqual, parse } from 'date-fns';
+import { addMinutes, format, isAfter, isBefore, isEqual, parse, subMinutes } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { twMerge } from 'tailwind-merge';
 
@@ -36,9 +36,9 @@ export default function SideBarFilterTimeItem() {
         setEndTime(undefined);
         setFirstClick(false);
       } else if (startTime && !endTime) {
-        if (date < startTime) {
-          setEndTime(startTime);
-          setStartTime(date);
+        if (date <= startTime) {
+          setEndTime(addMinutes(startTime, 30));
+          setStartTime(subMinutes(date, 30));
         } else {
           setEndTime(date);
         }
@@ -78,6 +78,7 @@ export default function SideBarFilterTimeItem() {
                   isInRange(getDate(hour, 0))
                     ? 'bg-classpick-400 border-classpick-400'
                     : 'bg-classpick-100 border-classpick-300',
+                  startTime && isEqual(startTime, getDate(hour, 0)) && 'bg-classpick-400',
                 )}
               />
               <div className="border-classpick-400 h-7 w-[1px] border-y bg-white" />
@@ -88,6 +89,7 @@ export default function SideBarFilterTimeItem() {
                   isInRange(getDate(hour, 30))
                     ? 'bg-classpick-400 border-classpick-400'
                     : 'bg-classpick-100 border-classpick-300',
+                  startTime && isEqual(startTime, getDate(hour, 30)) && 'bg-classpick-400',
                 )}
               />
             </div>
