@@ -46,12 +46,12 @@ export default function Page() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="scrollbar-none flex w-full flex-wrap justify-center gap-6 overflow-y-auto">
         {rooms.map((room) => (
           <Link
             key={room.roomId}
             href={`/${room.roomId}`}
-            className="flex flex-col rounded-xl bg-white/80 p-2 shadow-lg"
+            className="flex max-w-[315px] min-w-[250px] flex-1 flex-col rounded-xl bg-white/80 p-2 shadow-lg"
           >
             <div className="relative">
               {room.image ? (
