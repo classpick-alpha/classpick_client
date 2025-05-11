@@ -1,0 +1,55 @@
+import { Step } from '@/app/my-page/_component/reservation-card/kanban-layout/_config/step';
+
+import { ReservationResponse } from '@/api/dto/reservation';
+import { now } from '@/util';
+import { differenceInDays, format, parse } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { twMerge } from 'tailwind-merge';
+
+interface ReservationCardProps {
+  step: Step;
+  reservation: ReservationResponse;
+}
+
+export default function ReservationCard({ step, reservation }: ReservationCardProps) {
+  const reservationDate = parse(reservation.date, 'yyyy-MM-dd', new Date());
+  const remainDate = differenceInDays(reservationDate, now());
+
+  return (
+    <div
+      className={twMerge(
+        'flex cursor-pointer flex-col gap-2 rounded-lg border border-gray-50 bg-gray-50 p-4 shadow',
+        step.color.hover.border,
+      )}
+    >
+      <section className="flex flex-col">
+        <div className="flex justify-between">
+          <p className="title1-nanum text-[22px]">
+            {reservation.room.placeName} {reservation.room.unitNumber}호
+          </p>
+          {step.badge(reservation)}
+        </div>
+        <p className="caption1-nanum text-primary-gray-500">
+          {format(reservationDate, 'yyyy년 MM월 dd일 EEEE', { locale: ko })}
+        </p>
+      </section>
+
+      {remainDate > 0 ? (
+        <p className={twMerge('title1-nanum text-[26px] font-bold', step.color.text)}>
+          D-{remainDate}
+        </p>
+      ) : (
+        <div className="h-7" />
+      )}
+
+      <div className="flex gap-2">
+        <p className="text-sidebar-primary body1-pretendard rounded-sm bg-white p-2">
+          {reservation.startTime}-{reservation.endTime}
+        </p>
+        <p className="text-sidebar-primary body1-pretendard rounded-sm bg-white p-2">
+          {reservation.people}명
+        </p>
+      </div>
+    </div>
+  );
+}

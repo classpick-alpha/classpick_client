@@ -12,7 +12,7 @@ import { Kanban } from 'iconsax-react';
 import { LayoutGrid } from 'lucide-react';
 import { useQueryState } from 'nuqs';
 
-type LayoutType = 'kanban' | 'grid';
+type LayoutType = 'kanban' | 'card';
 
 interface ReservationCardProps {
   reservations: ReservationResponse[];
@@ -27,12 +27,12 @@ export default function ReservationCard({ reservations }: ReservationCardProps) 
   });
 
   return (
-    <div className="flex h-full flex-col gap-8 rounded-2xl bg-white p-8 pb-4">
+    <div className="scrollbar-none flex h-full max-h-[calc(100dvh-80px-180px-40px)] flex-col gap-6 overflow-y-auto rounded-2xl bg-white p-8 pb-4">
       <div className="flex justify-between">
         <div className="flex w-full flex-col gap-2">
           <div className="flex items-center gap-2">
             <h2 className="text-primary-gray-600 title2-nanum font-bold">현재 예약 현황</h2>
-            <Popover />
+            {layoutType === 'kanban' && <Popover />}
           </div>
           <p className="caption1-nanum">현재까지 예약된 강의실의 신청 현황입니다.</p>
         </div>
@@ -52,10 +52,10 @@ export default function ReservationCard({ reservations }: ReservationCardProps) 
             <LayoutGrid
               size={24}
               color={
-                layoutType === 'grid' ? 'var(--color-classpick-500)' : 'var(--color-classpick-100)'
+                layoutType === 'card' ? 'var(--color-classpick-500)' : 'var(--color-classpick-100)'
               }
               className="cursor-pointer"
-              onClick={() => setLayoutType('grid')}
+              onClick={() => setLayoutType('card')}
             />
           </div>
         )}

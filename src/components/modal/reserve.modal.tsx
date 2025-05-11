@@ -161,7 +161,7 @@ export default function ReserveModal({
           </FormField>
 
           <FormField label="장소">
-            <Input variant="modal" value={`${room.placeName} ${room.unitNumber}`} disabled />
+            <Input variant="modal" value={`${room.placeName} ${room.unitNumber}호`} disabled />
           </FormField>
 
           <hr className="col-span-2 -mx-7 w-[494px] text-indigo-50" />

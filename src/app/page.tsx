@@ -78,10 +78,10 @@ export default function Page() {
             <div className="flex justify-between p-3">
               <div className="flex flex-col">
                 <p className="subtitle1-nanum text-primary-gray-600">
-                  {room.placeName} {room.unitNumber}
+                  {room.placeName} {room.unitNumber}호
                 </p>
                 <p className="body1-nanum text-sidebar-primary">
-                  {room.placeName} {room.unitNumber}
+                  {room.placeName} {room.unitNumber}호
                 </p>
               </div>
               <div className="border-primary-gray-500 h-fit rounded-full border p-1">

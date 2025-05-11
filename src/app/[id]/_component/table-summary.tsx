@@ -31,7 +31,7 @@ export default function TableSummary({ date, dates, room }: TableSummaryProps) {
             {date.getMonth() + 1}월, {date.getFullYear()}년
           </div>
           <div className="text-lg leading-4.5 text-neutral-700">
-            {room.placeName} {room.unitNumber}
+            {room.placeName} {room.unitNumber}호
           </div>
         </div>
       </div>
