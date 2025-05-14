@@ -15,7 +15,7 @@ interface ReserveRejectedDetailModalProps {
   reservation: ReservationResponse;
 }
 
-export default function ReserveRejectedDetailModal({
+export default function ReserveSuccessDetailModal({
   reservation,
 }: ReserveRejectedDetailModalProps) {
   const { user } = useUserStore();
@@ -26,10 +26,10 @@ export default function ReserveRejectedDetailModal({
   return (
     <GridIconModal
       width={550}
-      color="var(--color-system-alarm)"
+      color="var(--color-system-alarm3)"
       icon={Warning2}
-      iconColor="var(--color-system-alarm)"
-      title="예약 신청한 강의실이 반려됐어요"
+      iconColor="var(--color-system-alarm3)"
+      title="이용한 강의실을 사진으로 인증해주세요"
       buttons={
         <>
           <Button variant="secondary" onClick={closeModal}>
@@ -47,15 +47,15 @@ export default function ReserveRejectedDetailModal({
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-center gap-2">
-            <h2 className="subtitle2-nanum text-system-alarm">서류를 다시 업로드해주세요</h2>
+            <h2 className="subtitle2-nanum text-system-alarm3">
+              강의실 사진을 촬영하여 업로드해주세요
+            </h2>
             <h3 className="body1-pretendard text-primary-gray-600 text-center">
-              신청자 이름과 제출된 서류상의 성함과 동일하지 않습니다.
-              <br />
-              다시 확인해서 업로드해주세요.
+              모든 이용자분 들을 위한 조치이니 협조 부탁드립니다.
             </h3>
           </div>
 
-          <div className="border-system-alarm flex cursor-pointer flex-col items-center gap-1 rounded border border-dashed py-5 hover:bg-gray-50">
+          <div className="border-system-alarm3 flex cursor-pointer flex-col items-center gap-1 rounded border border-dashed py-5 hover:bg-gray-50">
             <div className="flex items-center gap-1.5">
               <Folder size={22} color="black" />
               <p className="subtitle2-nanum text-primary-gray-600">파일 선택</p>

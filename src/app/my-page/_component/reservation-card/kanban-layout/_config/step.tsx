@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import ReserveRejectedDetailModal from '@/modal/reserve-rejected-detail.modal';
+import ReserveSuccessDetailModal from '@/modal/reserve-success-detail.modal';
 
 import { ReservationResponse, Status } from '@/api/dto/reservation';
 import { now } from '@/util';
@@ -101,5 +102,7 @@ export const steps: Step[] = [
           인증완료
         </p>
       ),
+    modal: (reservation: ReservationResponse) =>
+      reservation.people === 1 && <ReserveSuccessDetailModal reservation={reservation} />,
   },
 ];
