@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,11 +13,32 @@ import { format } from 'date-fns';
 import { MoveUpRight } from 'lucide-react';
 
 export default function Page() {
-  const [, startApi] = useApi();
+  const [isApiProcessing, startApi] = useApi();
 
-  const [rooms, setRooms] = useState<RoomResponse[]>([]);
+  const observerTarget = useRef(null);
+
+  const [allRooms, setAllRooms] = useState<RoomResponse[]>([]);
+  const [visibleRoomLength, setVisibleRoomLength] = useState(10);
 
   const { placeName, capacity, date, startTime, endTime } = useFilterStore();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && visibleRoomLength < allRooms.length) {
+        setVisibleRoomLength((prev) => prev + 10);
+      }
+    });
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [visibleRoomLength, allRooms.length]);
 
   useEffect(() => {
     startApi(async () => {
@@ -28,7 +49,8 @@ export default function Page() {
         startTime ? format(startTime, 'HH:mm') : undefined,
         endTime ? format(endTime, 'HH:mm') : undefined,
       );
-      setRooms(rooms);
+      setAllRooms(rooms);
+      setVisibleRoomLength(10);
     });
   }, [placeName, capacity, date, startTime, endTime]);
 
@@ -42,12 +64,12 @@ export default function Page() {
       <div className="flex items-center gap-6">
         <h2 className="title1-nanum text-primary-gray-600">빈 강의실 목록</h2>
         <p className="body2-nanum text-classpick-300 rounded-full border border-white bg-white/50 px-4 py-2">
-          예약 가능한 강의실 {rooms.length}
+          예약 가능한 강의실 {allRooms.length}
         </p>
       </div>
 
       <div className="scrollbar-none flex w-fit flex-wrap gap-6 overflow-y-auto pb-6">
-        {rooms.map((room) => (
+        {allRooms.slice(0, visibleRoomLength).map((room) => (
           <Link
             key={room.roomId}
             href={`/${room.roomId}`}
@@ -90,6 +112,10 @@ export default function Page() {
             </div>
           </Link>
         ))}
+
+        {!isApiProcessing && visibleRoomLength < allRooms.length && (
+          <div ref={observerTarget} className="h-4 w-full" />
+        )}
       </div>
     </div>
   );
