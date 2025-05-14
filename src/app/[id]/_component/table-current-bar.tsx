@@ -29,7 +29,7 @@ export default function TableCurrentBar({ date }: TableCurrentBarProps) {
 
   return (
     <hr
-      className="pointer-events-none absolute z-30 w-full border-2 border-rose-400"
+      className="border-system-alarm pointer-events-none absolute z-10 w-full border-[1.5px]"
       style={{ top: `${top * pxPerMinute}px` }}
     />
   );

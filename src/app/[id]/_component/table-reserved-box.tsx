@@ -15,16 +15,15 @@ export default function TableReservedBox({
 }: TableReservedBoxProps) {
   return (
     <div
-      className="border-classpick-500 from-classpick-200 absolute left-[10px] z-20 flex h-full w-[calc(100%-20px)] flex-col justify-end rounded-md border-2 bg-linear-to-b to-white shadow"
+      className="border-classpick-200 from-classpick-200 absolute left-[10px] z-20 flex h-full w-[calc(100%-20px)] flex-col justify-end rounded-md border-2 bg-linear-to-b to-white shadow"
       style={{
-        top: `${startOffset * pxPerMinute}px`,
-        height: `${(endOffset - startOffset) * pxPerMinute}px`,
+        top: `${(startOffset + 2) * pxPerMinute}px`,
+        height: `${(endOffset - startOffset - 4) * pxPerMinute}px`,
       }}
     >
       <div className="flex flex-col p-4">
-        {/*TODO: 유저가 서버에서 안넘어옴*/}
-        <p className="text-sm font-bold">(수정필요)</p>
-        <p className="text-classpick-500 text-xs font-bold">
+        <p className="font-nanum text-sm font-bold">{reservation.user.name}</p>
+        <p className="text-classpick-500 text-xs font-medium">
           {reservation.startTime}-{reservation.endTime}
         </p>
       </div>
