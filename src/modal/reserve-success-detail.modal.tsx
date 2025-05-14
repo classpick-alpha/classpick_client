@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import Button from '@/components/button';
 import { FormField } from '@/components/form/form-field';
 import { Input } from '@/components/form/input';
@@ -6,10 +8,12 @@ import GridIconModal from '@/components/modal-container/grid-icon-modal';
 import { ReservationResponse } from '@/api/dto/reservation';
 import { useModalStore } from '@/store/modal.store';
 import { useUserStore } from '@/store/user.store';
+import { checkLocation } from '@/util/gps-validator';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { TickCircle, Warning2 } from 'iconsax-react';
 import { Folder, Forward } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 interface ReserveRejectedDetailModalProps {
   reservation: ReservationResponse;
@@ -20,6 +24,15 @@ export default function ReserveSuccessDetailModal({
 }: ReserveRejectedDetailModalProps) {
   const { user } = useUserStore();
   const { closeModal } = useModalStore();
+
+  const [validatedLocation, setValidatedLocation] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const validated = await checkLocation();
+      setValidatedLocation(validated);
+    })();
+  }, []);
 
   if (!user) return null;
 
@@ -55,12 +68,25 @@ export default function ReserveSuccessDetailModal({
             </h3>
           </div>
 
-          <div className="border-system-alarm3 flex cursor-pointer flex-col items-center gap-1 rounded border border-dashed py-5 hover:bg-gray-50">
-            <div className="flex items-center gap-1.5">
-              <Folder size={22} color="black" />
-              <p className="subtitle2-nanum text-primary-gray-600">파일 선택</p>
-            </div>
-            <p className="body2-nanum text-neutral-500">파일을 여기로 끌어 놓으세요</p>
+          <div
+            className={twMerge(
+              'border-system-alarm3 flex flex-col items-center gap-1 rounded border border-dashed py-5',
+              validatedLocation && 'cursor-pointer hover:bg-gray-50',
+            )}
+          >
+            {validatedLocation ? (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <Folder size={22} color="black" />
+                  <p className="subtitle2-nanum text-primary-gray-600">파일 선택</p>
+                </div>
+                <p className="body2-nanum text-neutral-500">파일을 여기로 끌어 놓으세요</p>
+              </>
+            ) : (
+              <p className="body2-pretendard text-system-alarm3">
+                국민대학교 내부에서만 인증할 수 있습니다.
+              </p>
+            )}
           </div>
         </div>
 
