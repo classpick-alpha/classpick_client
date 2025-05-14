@@ -34,8 +34,8 @@ export default function SideBarFilterItem<T>({
   return (
     <div
       className={twMerge(
-        'w-[260px] rounded-md bg-white shadow-md',
-        isActive(name) ? 'border-classpick-300 border' : '',
+        'w-[260px] rounded-md border bg-white shadow-md',
+        isActive(name) ? 'border-classpick-300' : 'border-white',
       )}
     >
       <div className="pt-3 pr-6 pb-4 pl-4">

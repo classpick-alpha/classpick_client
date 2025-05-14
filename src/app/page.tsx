@@ -46,7 +46,7 @@ export default function Page() {
         </p>
       </div>
 
-      <div className="scrollbar-none flex w-full flex-wrap justify-center gap-6 overflow-y-auto">
+      <div className="scrollbar-none flex w-fit flex-wrap gap-6 overflow-y-auto pb-6">
         {rooms.map((room) => (
           <Link
             key={room.roomId}

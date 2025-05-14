@@ -1,6 +1,7 @@
 import { Step } from '@/app/my-page/_component/reservation-card/kanban-layout/_config/step';
 
 import { ReservationResponse } from '@/api/dto/reservation';
+import { useModalStore } from '@/store/modal.store';
 import { now } from '@/util';
 import { differenceInDays, format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -12,6 +13,8 @@ interface ReservationCardProps {
 }
 
 export default function ReservationCard({ step, reservation }: ReservationCardProps) {
+  const { openModal } = useModalStore();
+
   const reservationDate = parse(reservation.date, 'yyyy-MM-dd', new Date());
   const remainDate = differenceInDays(reservationDate, now());
 
@@ -21,6 +24,7 @@ export default function ReservationCard({ step, reservation }: ReservationCardPr
         'flex cursor-pointer flex-col gap-2 rounded-lg border border-gray-50 bg-gray-50 p-4 shadow',
         step.color.hover.border,
       )}
+      onClick={() => step.modal && openModal(step.modal(reservation))}
     >
       <section className="flex flex-col">
         <div className="flex justify-between">

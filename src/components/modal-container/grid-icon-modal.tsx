@@ -6,16 +6,20 @@ import colors from 'tailwindcss/colors';
 
 interface GridIconModalProps {
   width?: number;
+  color?: string;
   icon: Icon;
+  iconColor?: string;
   title: string;
-  description: string;
+  description?: string;
   children?: ReactNode;
   buttons?: ReactNode;
 }
 
 export default function GridIconModal({
   width = 450,
+  color = '#595cff',
   icon: Icon,
+  iconColor = colors.slate['600'],
   title,
   description,
   children,
@@ -27,7 +31,7 @@ export default function GridIconModal({
         <div
           className="pointer-events-none absolute top-[-20%] left-1/2 h-[100%] w-[200%] -translate-x-1/2 opacity-50"
           style={{
-            background: 'radial-gradient(ellipse at top center, #595cff 20%, transparent 70%)',
+            background: `radial-gradient(ellipse at top center, ${color} 20%, transparent 70%)`,
           }}
         />
 
@@ -53,13 +57,13 @@ export default function GridIconModal({
       <div className="relative z-10 flex flex-col items-center justify-center gap-4 pt-9 pb-4">
         <div className="w-fit rounded-full border border-neutral-200 bg-gradient-to-b from-neutral-100 to-transparent p-6 backdrop-blur-md">
           <div className="rounded-full border border-gray-200 bg-white p-4">
-            <Icon size={32} color={colors.slate['600']} variant="Bold" />
+            <Icon size={32} color={iconColor} variant="Bold" />
           </div>
         </div>
 
         <section className="flex flex-col items-center">
           <h2 className="subtitle1-nanum text-primary-gray-800">{title}</h2>
-          <h3 className="caption1-nanum text-primary-gray-500">{description}</h3>
+          {description && <h3 className="caption1-nanum text-primary-gray-500">{description}</h3>}
         </section>
 
         {children && (

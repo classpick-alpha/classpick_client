@@ -2,7 +2,7 @@ import { Dispatch, MouseEvent, SetStateAction, useCallback, useState } from 'rea
 
 import { splitMinute } from '@/app/[id]/_config';
 
-import ReserveModal from '@/components/modal/reserve.modal';
+import ReserveModal from '@/modal/reserve.modal';
 
 import { DailyReservation, RoomResponse } from '@/api/dto/room';
 import { useModalStore } from '@/store/modal.store';

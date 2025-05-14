@@ -4,7 +4,7 @@ import GridIconModal from '@/components/modal-container/grid-icon-modal';
 import { useModalStore } from '@/store/modal.store';
 import { TickCircle, Warning2 } from 'iconsax-react';
 
-export default function ReserveRejectedModal() {
+export default function ReserveRejectedSummaryModal() {
   const { closeModal } = useModalStore();
 
   return (

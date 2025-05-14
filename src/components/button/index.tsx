@@ -19,8 +19,8 @@ export default function Button({
         variant === 'primary'
           ? 'bg-classpick-500 hover:bg-classpick-450 text-white'
           : variant === 'secondary'
-            ? 'bg-primary-gray-600 hover:bg-primary-gray-500 text-white'
-            : 'hover:bg-classpick-100 text-classpick-500 bg-white shadow-xs',
+            ? 'bg-primary-gray-800 hover:bg-primary-gray-600 text-white'
+            : 'hover:bg-primary-gray-200 text-primary-gray-800 bg-white shadow-xs',
         className,
       )}
       {...props}

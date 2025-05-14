@@ -15,7 +15,7 @@ export default function KanbanLayout({ reservations }: KanbanProps) {
         <div key={step.title} className="flex flex-col gap-2.5">
           <p className={twMerge('caption1-nanum font-bold', step.color.text)}>{step.title}</p>
           <div className={twMerge('h-[6px] w-full rounded-full', step.color.background)} />
-          <div className="scrollbar-none flex max-h-[calc(100dvh-80px-180px-52px-166px)] flex-col gap-2 overflow-y-auto">
+          <div className="scrollbar-none flex max-h-[calc(100dvh-80px-180px-52px-166px)] flex-col gap-2 overflow-y-auto p-0.5">
             {reservations.filter(step.filter).map((reservation) => (
               <ReservationCard
                 key={reservation.reservationId}

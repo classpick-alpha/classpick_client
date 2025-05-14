@@ -1,3 +1,4 @@
+import { UploadImageResponse } from '@/api/dto/common';
 import {
   CreateReservationRequest,
   ReservationListResponse,
@@ -21,5 +22,13 @@ export default class Reservation {
 
   public async getReservationsList(): Promise<ReservationListResponse> {
     return this.request.get('/v0.0/reservations');
+  }
+
+  public async generateOcrImage(reservationId: number): Promise<UploadImageResponse> {
+    return this.request.post(`/v0.0/reservations/${reservationId}/ocr/url`);
+  }
+
+  public async generateCleanUpImage(reservationId: number): Promise<UploadImageResponse> {
+    return this.request.post(`/v0.0/reservations/${reservationId}/clean-up/url`);
   }
 }

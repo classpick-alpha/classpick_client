@@ -1,3 +1,4 @@
+import Lecture from '@/api/controller/lecture';
 import Reservation from '@/api/controller/reservation';
 import Room from '@/api/controller/room';
 import User from '@/api/controller/user';
@@ -12,6 +13,7 @@ export default class Api {
     User: new User(this.request),
     Room: new Room(this.request),
     Reservation: new Reservation(this.request),
+    Lecture: new Lecture(this.request),
   };
 
   private constructor() {

@@ -17,6 +17,7 @@ const config = {
     '^@/components/layout',
     '^@/components/ui',
     '^@/components',
+    '^@/modal',
     '^@/hooks',
     '^@/lib',
     '^@/style',

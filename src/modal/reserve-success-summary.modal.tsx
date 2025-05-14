@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { TickCircle } from 'iconsax-react';
 import colors from 'tailwindcss/colors';
 
-export default function ReserveSuccessModal() {
+export default function ReserveSuccessSummaryModal() {
   const { closeModal } = useModalStore();
 
   return (

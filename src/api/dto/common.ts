@@ -4,3 +4,7 @@ export default interface ApiResponse<T> {
   timestamp: string;
   data: T;
 }
+
+export interface UploadImageResponse {
+  url: string;
+}

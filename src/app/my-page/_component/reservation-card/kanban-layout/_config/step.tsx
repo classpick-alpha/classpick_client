@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import ReserveRejectedDetailModal from '@/modal/reserve-rejected-detail.modal';
+
 import { ReservationResponse, Status } from '@/api/dto/reservation';
 import { now } from '@/util';
 import { isBefore, parse } from 'date-fns';
@@ -15,6 +17,7 @@ export interface Step {
   };
   filter: (reservation: ReservationResponse) => boolean;
   badge: (reservation: ReservationResponse) => ReactNode;
+  modal?: (reservation: ReservationResponse) => ReactNode;
 }
 
 export const steps: Step[] = [
@@ -46,9 +49,10 @@ export const steps: Step[] = [
     filter: (reservation: ReservationResponse) => reservation.status === Status.REJECTED,
     badge: () => (
       <p className="bg-system-alarm/10 text-system-alarm body2-pretendard h-fit rounded px-2 py-0.5">
-        예약심사
+        예약반려
       </p>
     ),
+    modal: (reservation) => <ReserveRejectedDetailModal reservation={reservation} />,
   },
   {
     title: '예약완료',

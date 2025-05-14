@@ -39,7 +39,7 @@ export default function CardLayout({ reservations }: CardProps) {
             </button>
           ))}
         </div>
-        <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto">
+        <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto p-0.5">
           {reservations.filter(currentState.filter).map((reservation) => (
             <ReservationCard key={reservation.reservationId} reservation={reservation} />
           ))}
@@ -76,7 +76,7 @@ export default function CardLayout({ reservations }: CardProps) {
               </button>
             ))}
           </div>
-          <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto">
+          <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto p-0.5">
             {reservations.filter(afterState.filter).map((reservation) => (
               <ReservationCard key={reservation.reservationId} reservation={reservation} />
             ))}

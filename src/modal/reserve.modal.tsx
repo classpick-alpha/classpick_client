@@ -6,7 +6,8 @@ import { FormField } from '@/components/form/form-field';
 import { Input } from '@/components/form/input';
 import { TextAreaInput } from '@/components/form/text-area-input';
 import GridIconModal from '@/components/modal-container/grid-icon-modal';
-import ReserveSuccessModal from '@/components/modal/reserve-success.modal';
+
+import ReserveSuccessSummaryModal from '@/modal/reserve-success-summary.modal';
 
 import Api from '@/api';
 import { CreateReservationRequest, CreateReservationRequestSchema } from '@/api/dto/reservation';
@@ -57,6 +58,8 @@ export default function ReserveModal({
 
   const onSubmit: SubmitHandler<CreateReservationRequest> = useCallback(
     (body) => {
+      if (!user) return;
+
       startApi(
         async () => {
           const { date, startTime, endTime, status } =
@@ -70,22 +73,15 @@ export default function ReserveModal({
                 ...prev.filter((reservation) => reservation.date !== date),
                 {
                   date: find.date,
-                  reservations: [
-                    ...find.reservations,
-                    {
-                      startTime,
-                      endTime,
-                      status,
-                    },
-                  ],
+                  reservations: [...find.reservations, { startTime, endTime, status, user }],
                 },
               ];
             } else {
-              return [...prev, { date, reservations: [{ startTime, endTime, status }] }];
+              return [...prev, { date, reservations: [{ startTime, endTime, status, user }] }];
             }
           });
 
-          openModal(<ReserveSuccessModal />);
+          openModal(<ReserveSuccessSummaryModal />);
         },
         {
           loading: '강의실을 예약하고 있습니다.',
@@ -93,7 +89,7 @@ export default function ReserveModal({
         },
       );
     },
-    [room],
+    [room, user],
   );
 
   if (!user) return null;
@@ -112,7 +108,7 @@ export default function ReserveModal({
           </Button>
           {/* TODO: 공유하기를 누르면 어떤 일이 일어나나요 */}
           <Button variant="white" className="w-auto min-w-fit">
-            <Forward size={18} color="var(--color-classpick-500)" />
+            <Forward size={18} />
             공유하기
           </Button>
         </>

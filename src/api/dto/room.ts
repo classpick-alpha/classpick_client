@@ -13,10 +13,16 @@ export interface RoomResponse {
   capacity: number | null;
 }
 
+export interface User {
+  userId: number;
+  name: string;
+}
+
 export interface TimeReservations {
   startTime: string;
   endTime: string;
   status: Status;
+  user: User;
 }
 
 export interface DailyReservation {

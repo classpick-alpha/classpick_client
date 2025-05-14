@@ -6,12 +6,14 @@ import TableBlock from '@/app/[id]/_component/table-block';
 import TableContainer from '@/app/[id]/_component/table-container';
 import TableCurrentBar from '@/app/[id]/_component/table-current-bar';
 import TableDraggingArea from '@/app/[id]/_component/table-dragging-area';
+import TableLectureBox from '@/app/[id]/_component/table-lecture-box';
 import TablePendingBox from '@/app/[id]/_component/table-pending-box';
 import TableReservedBox from '@/app/[id]/_component/table-reserved-box';
 import TableSummary from '@/app/[id]/_component/table-summary';
 import { startHour } from '@/app/[id]/_config';
 
 import Api from '@/api';
+import { LectureResponse } from '@/api/dto/lecture';
 import { Status } from '@/api/dto/reservation';
 import { DailyReservation, RoomResponse } from '@/api/dto/room';
 import useTimetableDrag from '@/hook/timetable/drag';
@@ -30,6 +32,7 @@ export default function Page({ params }: Props) {
 
   const [room, setRoom] = useState<RoomResponse>();
   const [timeTable, setTimeTable] = useState<DailyReservation[]>([]);
+  const [lectures, setLectures] = useState<LectureResponse[]>([]);
 
   const { date: _date } = useFilterStore();
   const date = useMemo(() => _date || new Date(), [_date]);
@@ -69,6 +72,13 @@ export default function Page({ params }: Props) {
     });
   }, [roomId, date]);
 
+  useEffect(() => {
+    startApi(async () => {
+      const { lectures } = await Api.Domain.Lecture.getLectures(roomId);
+      setLectures(lectures);
+    });
+  }, [roomId]);
+
   if (isApiProcessing || !room || !timeTable) return null;
 
   return (
@@ -93,6 +103,23 @@ export default function Page({ params }: Props) {
               dragStart={dragStart}
               dragEnd={dragEnd}
             />
+
+            {lectures
+              .filter(
+                (lecture) =>
+                  lecture.dow ===
+                  ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][
+                    date.getDay()
+                  ],
+              )
+              .map((lecture) => (
+                <TableLectureBox
+                  key={lecture.name + lecture.startTime}
+                  lecture={lecture}
+                  startOffset={dateToSlot(parse(lecture.startTime, 'HH:mm', new Date()))}
+                  endOffset={dateToSlot(parse(lecture.endTime, 'HH:mm', new Date()))}
+                />
+              ))}
 
             {timeTable
               .find((reservation) =>
