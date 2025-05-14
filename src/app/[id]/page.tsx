@@ -31,7 +31,7 @@ export default function Page({ params }: Props) {
   const [isApiProcessing, startApi] = useApi();
 
   const [room, setRoom] = useState<RoomResponse>();
-  const [timeTable, setTimeTable] = useState<DailyReservation[]>([]);
+  const [reservations, setReservations] = useState<DailyReservation[]>([]);
   const [lectures, setLectures] = useState<LectureResponse[]>([]);
 
   const { date: _date } = useFilterStore();
@@ -45,7 +45,7 @@ export default function Page({ params }: Props) {
     handleDragging,
     handleDragEnd,
     isOccupied,
-  } = useTimetableDrag({ room, timeTable, setTimeTable });
+  } = useTimetableDrag({ room, lectures, reservations, setReservations });
 
   const dates = useMemo(
     () =>
@@ -68,7 +68,7 @@ export default function Page({ params }: Props) {
         format(date, 'yyyy-MM-dd'),
       );
       setRoom(room);
-      setTimeTable(weekly);
+      setReservations(weekly);
     });
   }, [roomId, date]);
 
@@ -79,7 +79,7 @@ export default function Page({ params }: Props) {
     });
   }, [roomId]);
 
-  if (isApiProcessing || !room || !timeTable) return null;
+  if (isApiProcessing || !room || !reservations) return null;
 
   return (
     <div className="flex max-h-[calc(100dvh-80px-32px)] w-full flex-col rounded-2xl bg-white p-4">
@@ -121,7 +121,7 @@ export default function Page({ params }: Props) {
                 />
               ))}
 
-            {timeTable
+            {reservations
               .find((reservation) =>
                 isSameDay(parse(reservation.date, 'yyyy-MM-dd', new Date()), date),
               )

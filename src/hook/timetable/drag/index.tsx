@@ -4,16 +4,23 @@ import { splitMinute } from '@/app/[id]/_config';
 
 import ReserveModal from '@/modal/reserve.modal';
 
+import { LectureResponse } from '@/api/dto/lecture';
 import { DailyReservation, RoomResponse } from '@/api/dto/room';
 import { useModalStore } from '@/store/modal.store';
 import { isSameDay, parse } from 'date-fns';
 
 interface useTimetableDragProps {
   room?: RoomResponse;
-  timeTable: DailyReservation[];
-  setTimeTable: Dispatch<SetStateAction<DailyReservation[]>>;
+  lectures: LectureResponse[];
+  reservations: DailyReservation[];
+  setReservations: Dispatch<SetStateAction<DailyReservation[]>>;
 }
-export default function useTimetableDrag({ room, timeTable, setTimeTable }: useTimetableDragProps) {
+export default function useTimetableDrag({
+  room,
+  lectures,
+  reservations,
+  setReservations,
+}: useTimetableDragProps) {
   const { openModal } = useModalStore();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -22,14 +29,27 @@ export default function useTimetableDrag({ room, timeTable, setTimeTable }: useT
 
   const isOccupied = useCallback(
     (date: Date) =>
-      !!timeTable
-        .find((reservation) => isSameDay(parse(reservation.date, 'yyyy-MM-dd', new Date()), date))
+      !!reservations
+        .find((reservation) => isSameDay(parse(reservation.date, 'yyyy-MM-dd', date), date))
         ?.reservations.some(
           (reservation) =>
-            parse(reservation.startTime, 'HH:mm', new Date()).getTime() <= date.getTime() &&
-            date.getTime() < parse(reservation.endTime, 'HH:mm', new Date()).getTime(),
+            parse(reservation.startTime, 'HH:mm', date).getTime() <= date.getTime() &&
+            date.getTime() < parse(reservation.endTime, 'HH:mm', date).getTime(),
+        ) ||
+      lectures
+        .filter(
+          (lecture) =>
+            lecture.dow ===
+            ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][
+              date.getDay()
+            ],
+        )
+        .some(
+          (lecture) =>
+            parse(lecture.startTime, 'HH:mm', date).getTime() <= date.getTime() &&
+            date.getTime() < parse(lecture.endTime, 'HH:mm', date).getTime(),
         ),
-    [timeTable],
+    [lectures, reservations],
   );
 
   const handleDragStart = useCallback((e: MouseEvent, date: Date) => {
@@ -93,7 +113,7 @@ export default function useTimetableDrag({ room, timeTable, setTimeTable }: useT
           date={dragStart}
           startTime={dragStart}
           endTime={dragEnd}
-          setTimeTable={setTimeTable}
+          setTimeTable={setReservations}
         />,
       );
 

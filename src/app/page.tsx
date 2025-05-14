@@ -18,14 +18,14 @@ export default function Page() {
   const observerTarget = useRef(null);
 
   const [allRooms, setAllRooms] = useState<RoomResponse[]>([]);
-  const [visibleRoomLength, setVisibleRoomLength] = useState(10);
+  const [visibleRoomLength, setVisibleRoomLength] = useState(60);
 
   const { placeName, capacity, date, startTime, endTime } = useFilterStore();
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && visibleRoomLength < allRooms.length) {
-        setVisibleRoomLength((prev) => prev + 10);
+        setVisibleRoomLength((prev) => prev + 60);
       }
     });
 
@@ -50,7 +50,7 @@ export default function Page() {
         endTime ? format(endTime, 'HH:mm') : undefined,
       );
       setAllRooms(rooms);
-      setVisibleRoomLength(10);
+      setVisibleRoomLength(60);
     });
   }, [placeName, capacity, date, startTime, endTime]);
 
@@ -68,7 +68,7 @@ export default function Page() {
         </p>
       </div>
 
-      <div className="scrollbar-none flex w-fit flex-wrap gap-6 overflow-y-auto pb-6">
+      <div className="scrollbar-none flex flex-wrap gap-6 overflow-y-auto pb-6">
         {allRooms.slice(0, visibleRoomLength).map((room) => (
           <Link
             key={room.roomId}
@@ -83,6 +83,7 @@ export default function Page() {
                   width={300}
                   height={200}
                   className="h-[200px] rounded-xl object-cover"
+                  unoptimized
                 />
               ) : (
                 <div className="bg-primary-gray-400 h-[200px] rounded-xl" />
