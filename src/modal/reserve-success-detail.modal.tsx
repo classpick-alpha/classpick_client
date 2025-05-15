@@ -4,6 +4,7 @@ import Button from '@/components/button';
 import { FormField } from '@/components/form/form-field';
 import { Input } from '@/components/form/input';
 import GridIconModal from '@/components/modal-container/grid-icon-modal';
+import Uploader from '@/components/uploader';
 
 import { ReservationResponse } from '@/api/dto/reservation';
 import { useModalStore } from '@/store/modal.store';
@@ -12,8 +13,7 @@ import { checkLocation } from '@/util/gps-validator';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { TickCircle, Warning2 } from 'iconsax-react';
-import { Folder, Forward } from 'lucide-react';
-import { twMerge } from 'tailwind-merge';
+import { Forward } from 'lucide-react';
 
 interface ReserveRejectedDetailModalProps {
   reservation: ReservationResponse;
@@ -68,26 +68,13 @@ export default function ReserveSuccessDetailModal({
             </h3>
           </div>
 
-          <div
-            className={twMerge(
-              'border-system-alarm3 flex flex-col items-center gap-1 rounded border border-dashed py-5',
-              validatedLocation && 'cursor-pointer hover:bg-gray-50',
-            )}
-          >
-            {validatedLocation ? (
-              <>
-                <div className="flex items-center gap-1.5">
-                  <Folder size={22} color="black" />
-                  <p className="subtitle2-nanum text-primary-gray-600">파일 선택</p>
-                </div>
-                <p className="body2-nanum text-neutral-500">파일을 여기로 끌어 놓으세요</p>
-              </>
-            ) : (
-              <p className="body2-pretendard text-system-alarm3">
-                국민대학교 내부에서만 인증할 수 있습니다.
-              </p>
-            )}
-          </div>
+          {validatedLocation ? (
+            <Uploader />
+          ) : (
+            <p className="border-system-alarm3 body2-pretendard text-system-alarm3 flex flex-col items-center gap-1 rounded border border-dashed py-5">
+              국민대학교 내부에서만 인증할 수 있습니다.
+            </p>
+          )}
         </div>
 
         <hr className="-mx-6 w-[394px] border-gray-200" />

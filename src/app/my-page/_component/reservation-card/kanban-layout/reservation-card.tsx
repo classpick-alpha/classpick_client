@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { Step } from '@/app/my-page/_component/reservation-card/kanban-layout/_config/step';
 
 import { ReservationResponse } from '@/api/dto/reservation';
@@ -10,9 +12,14 @@ import { twMerge } from 'tailwind-merge';
 interface ReservationCardProps {
   step: Step;
   reservation: ReservationResponse;
+  setReservations: Dispatch<SetStateAction<ReservationResponse[]>>;
 }
 
-export default function ReservationCard({ step, reservation }: ReservationCardProps) {
+export default function ReservationCard({
+  step,
+  reservation,
+  setReservations,
+}: ReservationCardProps) {
   const { openModal } = useModalStore();
 
   const reservationDate = parse(reservation.date, 'yyyy-MM-dd', new Date());
@@ -24,7 +31,7 @@ export default function ReservationCard({ step, reservation }: ReservationCardPr
         'flex cursor-pointer flex-col gap-2 rounded-lg border border-gray-50 bg-gray-50 p-4 shadow',
         step.color.hover.border,
       )}
-      onClick={() => step.modal && openModal(step.modal(reservation))}
+      onClick={() => step.modal && openModal(step.modal(reservation, setReservations))}
     >
       <section className="flex flex-col">
         <div className="flex justify-between">

@@ -7,7 +7,7 @@ export interface RoomListResponse {
 
 export interface RoomResponse {
   roomId: number;
-  image: string;
+  image: string | null;
   placeName: string;
   unitNumber: string;
   capacity: number | null;

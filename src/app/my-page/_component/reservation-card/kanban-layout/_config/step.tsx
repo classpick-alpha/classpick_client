@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 
+import ReserveDetailModal from '@/modal/reserve-detail.modal';
 import ReserveRejectedDetailModal from '@/modal/reserve-rejected-detail.modal';
 import ReserveSuccessDetailModal from '@/modal/reserve-success-detail.modal';
 
@@ -18,7 +19,10 @@ export interface Step {
   };
   filter: (reservation: ReservationResponse) => boolean;
   badge: (reservation: ReservationResponse) => ReactNode;
-  modal?: (reservation: ReservationResponse) => ReactNode;
+  modal?: (
+    reservation: ReservationResponse,
+    setReservations: Dispatch<SetStateAction<ReservationResponse[]>>,
+  ) => ReactNode;
 }
 
 export const steps: Step[] = [
@@ -36,6 +40,9 @@ export const steps: Step[] = [
       <p className="text-primary-gray-500 body2-pretendard h-fit rounded bg-zinc-100 px-2 py-0.5">
         예약심사
       </p>
+    ),
+    modal: (reservation, setReservations) => (
+      <ReserveDetailModal reservation={reservation} setReservations={setReservations} />
     ),
   },
   {

@@ -26,7 +26,7 @@ export default function Page() {
   return (
     <div className="flex w-full flex-col gap-2">
       <InfoCard reservations={reservations} />
-      <ReservationCard reservations={reservations} />
+      <ReservationCard reservations={reservations} setReservations={setReservations} />
     </div>
   );
 }

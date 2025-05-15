@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { steps } from '@/app/my-page/_component/reservation-card/kanban-layout/_config/step';
 import ReservationCard from '@/app/my-page/_component/reservation-card/kanban-layout/reservation-card';
 
@@ -6,9 +8,10 @@ import { twMerge } from 'tailwind-merge';
 
 interface KanbanProps {
   reservations: ReservationResponse[];
+  setReservations: Dispatch<SetStateAction<ReservationResponse[]>>;
 }
 
-export default function KanbanLayout({ reservations }: KanbanProps) {
+export default function KanbanLayout({ reservations, setReservations }: KanbanProps) {
   return (
     <div className="grid grid-cols-4 gap-5">
       {steps.map((step) => (
@@ -21,6 +24,7 @@ export default function KanbanLayout({ reservations }: KanbanProps) {
                 key={reservation.reservationId}
                 step={step}
                 reservation={reservation}
+                setReservations={setReservations}
               />
             ))}
           </div>

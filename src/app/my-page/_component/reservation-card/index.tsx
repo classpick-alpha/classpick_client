@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,9 +18,10 @@ type LayoutType = 'kanban' | 'card';
 
 interface ReservationCardProps {
   reservations: ReservationResponse[];
+  setReservations: Dispatch<SetStateAction<ReservationResponse[]>>;
 }
 
-export default function ReservationCard({ reservations }: ReservationCardProps) {
+export default function ReservationCard({ reservations, setReservations }: ReservationCardProps) {
   const [layoutType, setLayoutType] = useQueryState<LayoutType>('layout', {
     defaultValue: 'kanban',
     clearOnDefault: false,
@@ -63,7 +66,7 @@ export default function ReservationCard({ reservations }: ReservationCardProps) 
 
       {reservations.length > 0 ? (
         layoutType === 'kanban' ? (
-          <KanbanLayout reservations={reservations} />
+          <KanbanLayout reservations={reservations} setReservations={setReservations} />
         ) : (
           <CardLayout reservations={reservations} />
         )
