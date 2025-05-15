@@ -20,6 +20,11 @@ export const CreateReservationRequestSchema = z.object({
   comment: z.string(),
 });
 
+export const OcrRequestSchema = z.object({
+  imageUrl: z.string(),
+});
+
+export type OcrRequest = z.infer<typeof OcrRequestSchema>;
 export type CreateReservationRequest = z.infer<typeof CreateReservationRequestSchema>;
 // ======================================== Request ========================================
 
@@ -33,9 +38,14 @@ export interface ReservationResponse {
   people: number;
   purpose: string;
   status: Status;
+  ocrVerified: boolean;
 }
 
 export interface ReservationListResponse {
   reservations: ReservationResponse[];
+}
+
+export interface OcrResponse {
+  success: boolean;
 }
 // ======================================== Response ========================================

@@ -1,7 +1,7 @@
 import { LectureListResponse } from '@/api/dto/lecture';
 import ApiRequest from '@/api/request';
 
-export default class Lecture {
+export class LectureController {
   constructor(private readonly request: ApiRequest) {}
 
   public async getLectures(id: string): Promise<LectureListResponse> {

@@ -1,7 +1,7 @@
-import Lecture from '@/api/controller/lecture';
-import Reservation from '@/api/controller/reservation';
-import Room from '@/api/controller/room';
-import User from '@/api/controller/user';
+import { LectureController } from '@/api/controller/lecture';
+import { ReservationAdminController, ReservationController } from '@/api/controller/reservation';
+import { RoomAdminController, RoomController } from '@/api/controller/room';
+import { UserController } from '@/api/controller/user';
 import ApiRequest from '@/api/request';
 
 export default class Api {
@@ -10,10 +10,12 @@ export default class Api {
   private readonly request = new ApiRequest();
 
   private readonly domain = {
-    User: new User(this.request),
-    Room: new Room(this.request),
-    Reservation: new Reservation(this.request),
-    Lecture: new Lecture(this.request),
+    User: new UserController(this.request),
+    Room: new RoomController(this.request),
+    RoomAdmin: new RoomAdminController(this.request),
+    Reservation: new ReservationController(this.request),
+    ReservationAdmin: new ReservationAdminController(this.request),
+    Lecture: new LectureController(this.request),
   };
 
   private constructor() {

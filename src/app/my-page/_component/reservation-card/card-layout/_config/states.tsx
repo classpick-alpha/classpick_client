@@ -66,8 +66,7 @@ export const afterStates: StateList<AfterState>[] = [
         now(),
         parse(reservation.endTime, 'HH:mm', parse(reservation.date, 'yyyy-MM-dd', new Date())),
       ) &&
-      // TODO: 추후 인증 필요 조건 수정
-      reservation.people === 1,
+      reservation.ocrVerified,
   },
   {
     state: 'verify',
@@ -78,7 +77,6 @@ export const afterStates: StateList<AfterState>[] = [
         now(),
         parse(reservation.endTime, 'HH:mm', parse(reservation.date, 'yyyy-MM-dd', new Date())),
       ) &&
-      // TODO: 추후 인증 필요 조건 수정
-      reservation.people !== 1,
+      !reservation.ocrVerified,
   },
 ];

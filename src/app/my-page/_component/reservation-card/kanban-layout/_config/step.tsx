@@ -41,9 +41,10 @@ export const steps: Step[] = [
         예약심사
       </p>
     ),
-    modal: (reservation, setReservations) => (
-      <ReserveDetailModal reservation={reservation} setReservations={setReservations} />
-    ),
+    modal: (
+      reservation: ReservationResponse,
+      setReservations: Dispatch<SetStateAction<ReservationResponse[]>>,
+    ) => <ReserveDetailModal reservation={reservation} setReservations={setReservations} />,
   },
   {
     title: '예약반려',
@@ -98,18 +99,22 @@ export const steps: Step[] = [
         now(),
         parse(reservation.endTime, 'HH:mm', parse(reservation.date, 'yyyy-MM-dd', new Date())),
       ),
-    // TODO: 추후 인증 필요 조건 수정
     badge: (reservation: ReservationResponse) =>
-      reservation.people === 1 ? (
-        <p className="body2-pretendard h-fit rounded bg-emerald-400/10 px-2 py-0.5 text-emerald-400">
-          인증필요
-        </p>
-      ) : (
+      reservation.ocrVerified ? (
         <p className="text-primary-gray-500 body2-pretendard h-fit rounded bg-zinc-100 px-2 py-0.5">
           인증완료
         </p>
+      ) : (
+        <p className="body2-pretendard h-fit rounded bg-emerald-400/10 px-2 py-0.5 text-emerald-400">
+          인증필요
+        </p>
       ),
-    modal: (reservation: ReservationResponse) =>
-      reservation.people === 1 && <ReserveSuccessDetailModal reservation={reservation} />,
+    modal: (
+      reservation: ReservationResponse,
+      setReservations: Dispatch<SetStateAction<ReservationResponse[]>>,
+    ) =>
+      !reservation.ocrVerified && (
+        <ReserveSuccessDetailModal reservation={reservation} setReservations={setReservations} />
+      ),
   },
 ];

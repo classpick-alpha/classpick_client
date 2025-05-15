@@ -1,7 +1,12 @@
-import { RoomListResponse, RoomTimeTableResponse } from '@/api/dto/room';
+import {
+  RoomCreateRequest,
+  RoomListResponse,
+  RoomResponse,
+  RoomTimeTableResponse,
+} from '@/api/dto/room';
 import ApiRequest from '@/api/request';
 
-export default class Room {
+export class RoomController {
   constructor(private readonly request: ApiRequest) {}
 
   public async getRooms(
@@ -26,5 +31,13 @@ export default class Room {
     searchParams.append('date', date);
 
     return this.request.get(`/v0.0/rooms/${roomId}?${searchParams}`);
+  }
+}
+
+export class RoomAdminController {
+  constructor(private readonly request: ApiRequest) {}
+
+  public async createRoom(data: RoomCreateRequest): Promise<RoomResponse> {
+    return this.request.post('/v0.0/admin/rooms', data);
   }
 }

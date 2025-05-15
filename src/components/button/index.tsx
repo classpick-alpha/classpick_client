@@ -17,10 +17,10 @@ export default function Button({
       className={twMerge(
         'flex w-full cursor-pointer items-center justify-center gap-1 rounded-xl px-6 py-4 text-sm font-semibold',
         variant === 'primary'
-          ? 'bg-classpick-500 hover:bg-classpick-450 text-white'
+          ? 'bg-classpick-600 hover:bg-classpick-500 disabled:bg-classpick-400 text-white disabled:cursor-default'
           : variant === 'secondary'
-            ? 'bg-primary-gray-800 hover:bg-primary-gray-600 text-white'
-            : 'hover:bg-primary-gray-200 text-primary-gray-800 bg-white shadow-xs',
+            ? 'bg-primary-gray-800 hover:bg-primary-gray-600 disabled:bg-primary-gray-500 text-white disabled:cursor-default'
+            : 'hover:bg-primary-gray-200 text-primary-gray-800 disabled:bg-primary-gray-200 bg-white shadow-xs disabled:cursor-default',
         className,
       )}
       {...props}

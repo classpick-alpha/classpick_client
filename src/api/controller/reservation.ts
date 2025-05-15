@@ -1,13 +1,19 @@
 import { UploadImageResponse } from '@/api/dto/common';
 import {
   CreateReservationRequest,
+  OcrRequest,
+  OcrResponse,
   ReservationListResponse,
   ReservationResponse,
 } from '@/api/dto/reservation';
 import ApiRequest from '@/api/request';
 
-export default class Reservation {
+export class ReservationController {
   constructor(private readonly request: ApiRequest) {}
+
+  public async getReservationsList(): Promise<ReservationListResponse> {
+    return this.request.get('/v0.0/reservations');
+  }
 
   public async createReservation(
     roomId: number,
@@ -20,15 +26,27 @@ export default class Reservation {
     return this.request.delete(`/v0.0/reservations/${reservationId}`);
   }
 
-  public async getReservationsList(): Promise<ReservationListResponse> {
-    return this.request.get('/v0.0/reservations');
-  }
-
   public async generateOcrImage(reservationId: number): Promise<UploadImageResponse> {
     return this.request.post(`/v0.0/reservations/${reservationId}/ocr/url`);
   }
 
+  public async verifyOcr(reservationId: number, data: OcrRequest): Promise<OcrResponse> {
+    return this.request.post(`/v0.0/reservations/${reservationId}/ocr/verify`, data);
+  }
+
   public async generateCleanUpImage(reservationId: number): Promise<UploadImageResponse> {
     return this.request.post(`/v0.0/reservations/${reservationId}/clean-up/url`);
+  }
+}
+
+export class ReservationAdminController {
+  constructor(private readonly request: ApiRequest) {}
+
+  public async approveReservation(reservationId: number): Promise<void> {
+    return this.request.post(`/v0.0/admin/reservation/${reservationId}/approve`);
+  }
+
+  public async rejectReservation(reservationId: number): Promise<void> {
+    return this.request.post(`/v0.0/admin/reservation/${reservationId}/rejected`);
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 
 import Button from '@/components/button';
 import { FormField } from '@/components/form/form-field';
@@ -6,7 +6,9 @@ import { Input } from '@/components/form/input';
 import GridIconModal from '@/components/modal-container/grid-icon-modal';
 import Uploader from '@/components/uploader';
 
+import Api from '@/api';
 import { ReservationResponse } from '@/api/dto/reservation';
+import { useApiWithToast } from '@/hook/use-api';
 import { useModalStore } from '@/store/modal.store';
 import { useUserStore } from '@/store/user.store';
 import { checkLocation } from '@/util/gps-validator';
@@ -17,15 +19,60 @@ import { Forward } from 'lucide-react';
 
 interface ReserveRejectedDetailModalProps {
   reservation: ReservationResponse;
+  setReservations: Dispatch<SetStateAction<ReservationResponse[]>>;
 }
 
 export default function ReserveSuccessDetailModal({
   reservation,
+  setReservations,
 }: ReserveRejectedDetailModalProps) {
+  const [isApiProcessing, startApi] = useApiWithToast();
+
   const { user } = useUserStore();
   const { closeModal } = useModalStore();
 
   const [validatedLocation, setValidatedLocation] = useState(false);
+  const [image, setImage] = useState<File>();
+
+  const handleProcessOcr = useCallback(() => {
+    if (!user || !image) return;
+    startApi(
+      async () => {
+        const { url } = await Api.Domain.Reservation.generateOcrImage(reservation.reservationId);
+
+        const s3Response = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': image.type,
+          },
+          body: image,
+        });
+
+        if (!s3Response.ok) {
+          throw new Error('사진 업로드에 실패했습니다.');
+        }
+
+        const { success } = await Api.Domain.Reservation.verifyOcr(reservation.reservationId, {
+          imageUrl: url.split('?')[0],
+        });
+
+        if (!success) {
+          throw new Error('사진 인증에 실패했습니다.');
+        }
+
+        setReservations((prev) =>
+          prev.map((x) =>
+            x.reservationId === reservation.reservationId ? { ...x, ocrVerified: true } : x,
+          ),
+        );
+      },
+      {
+        loading: '인증을 진행중입니다.',
+        success: '인증이 완료되었습니다.',
+        finally: closeModal,
+      },
+    );
+  }, [reservation, user, image]);
 
   useEffect(() => {
     (async () => {
@@ -45,7 +92,11 @@ export default function ReserveSuccessDetailModal({
       title="이용한 강의실을 사진으로 인증해주세요"
       buttons={
         <>
-          <Button variant="secondary" onClick={closeModal}>
+          <Button
+            variant="secondary"
+            disabled={isApiProcessing || !image}
+            onClick={handleProcessOcr}
+          >
             <TickCircle size={18} color="white" variant="Bold" />
             확인했어요
           </Button>
@@ -69,7 +120,7 @@ export default function ReserveSuccessDetailModal({
           </div>
 
           {validatedLocation ? (
-            <Uploader />
+            <Uploader onChangeFile={setImage} />
           ) : (
             <p className="border-system-alarm3 body2-pretendard text-system-alarm3 flex flex-col items-center gap-1 rounded border border-dashed py-5">
               국민대학교 내부에서만 인증할 수 있습니다.

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 import {
   AfterState,
@@ -14,9 +14,10 @@ import { twMerge } from 'tailwind-merge';
 
 interface CardProps {
   reservations: ReservationResponse[];
+  setReservations: Dispatch<SetStateAction<ReservationResponse[]>>;
 }
 
-export default function CardLayout({ reservations }: CardProps) {
+export default function CardLayout({ reservations, setReservations }: CardProps) {
   const [currentState, setCurrentState] = useState<StateList<CurrentState>>(currentStates[0]);
   const [afterState, setAfterState] = useState<StateList<AfterState>>(afterStates[0]);
 
@@ -41,7 +42,11 @@ export default function CardLayout({ reservations }: CardProps) {
         </div>
         <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto p-0.5">
           {reservations.filter(currentState.filter).map((reservation) => (
-            <ReservationCard key={reservation.reservationId} reservation={reservation} />
+            <ReservationCard
+              key={reservation.reservationId}
+              reservation={reservation}
+              setReservations={setReservations}
+            />
           ))}
         </div>
       </section>
@@ -78,7 +83,11 @@ export default function CardLayout({ reservations }: CardProps) {
           </div>
           <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto p-0.5">
             {reservations.filter(afterState.filter).map((reservation) => (
-              <ReservationCard key={reservation.reservationId} reservation={reservation} />
+              <ReservationCard
+                key={reservation.reservationId}
+                reservation={reservation}
+                setReservations={setReservations}
+              />
             ))}
           </div>
         </div>

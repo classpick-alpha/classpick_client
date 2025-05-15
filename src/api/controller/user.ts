@@ -1,7 +1,7 @@
 import { SafeUserResponse, UpdateUserRequest, UserResponse } from '@/api/dto/user';
 import ApiRequest from '@/api/request';
 
-export default class User {
+export class UserController {
   constructor(private readonly request: ApiRequest) {}
 
   public async getUserById(userId: number): Promise<SafeUserResponse> {

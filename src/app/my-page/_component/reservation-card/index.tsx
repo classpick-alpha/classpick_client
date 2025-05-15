@@ -68,7 +68,7 @@ export default function ReservationCard({ reservations, setReservations }: Reser
         layoutType === 'kanban' ? (
           <KanbanLayout reservations={reservations} setReservations={setReservations} />
         ) : (
-          <CardLayout reservations={reservations} />
+          <CardLayout reservations={reservations} setReservations={setReservations} />
         )
       ) : (
         <div className="my-auto flex w-fit items-center gap-20 self-center rounded-2xl bg-gray-50 py-4 pr-24 pl-4">

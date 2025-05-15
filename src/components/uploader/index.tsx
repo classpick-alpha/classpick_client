@@ -4,14 +4,14 @@ import { Folder } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 interface UploaderProps {
-  onChangeFile?: (file: File | null) => void;
+  onChangeFile?: (file?: File) => void;
 }
 
 export default function Uploader({ onChangeFile }: UploaderProps) {
   const [dragOver, setDragOver] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>();
 
-  const handleFileChange = (file: File | null) => {
+  const handleFileChange = (file?: File) => {
     setPreviewUrl(file ? URL.createObjectURL(file) : undefined);
     onChangeFile?.(file);
   };
@@ -83,7 +83,7 @@ export default function Uploader({ onChangeFile }: UploaderProps) {
         className="hidden"
         type="file"
         accept="image/*"
-        onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+        onChange={(e) => handleFileChange(e.target.files?.[0] ?? undefined)}
       />
     </>
   );
