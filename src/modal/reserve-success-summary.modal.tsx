@@ -13,7 +13,7 @@ export default function ReserveSuccessSummaryModal() {
   const { closeModal } = useModalStore();
 
   return (
-    <div className="relative h-full w-[450px] overflow-hidden bg-gray-50">
+    <div className="relative h-full w-[350px] overflow-hidden bg-gray-50 sm:w-[450px]">
       <div className="absolute inset-0 z-0">
         <div
           className="tob-[-20%] pointer-events-none absolute left-1/2 h-[100%] w-[200%] -translate-x-1/2 opacity-50"

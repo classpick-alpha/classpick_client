@@ -56,7 +56,7 @@ export default function Page() {
 
   return (
     <div
-      className="flex max-h-[calc(100dvh-80px-32px)] w-full flex-col gap-6 overflow-y-auto rounded-2xl bg-white px-12 py-11"
+      className="flex max-h-[calc(100dvh-80px-32px)] min-h-[calc(100dvh-64px)] w-full flex-col gap-6 overflow-y-auto bg-white p-8 md:min-h-auto md:rounded-2xl md:p-10"
       style={{
         background: 'radial-gradient(ellipse 150% 100% at top center, #595cff -100%, white 40%)',
       }}
@@ -68,7 +68,7 @@ export default function Page() {
         </p>
       </div>
 
-      <div className="scrollbar-none flex flex-wrap gap-6 overflow-y-auto pb-6">
+      <div className="scrollbar-none flex flex-wrap justify-center gap-6 overflow-y-auto md:pb-6">
         {allRooms.slice(0, visibleRoomLength).map((room) => (
           <Link
             key={room.roomId}

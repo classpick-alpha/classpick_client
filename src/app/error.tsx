@@ -12,7 +12,7 @@ interface Props {
 
 export default function Page({ reset }: Props) {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white p-4">
+    <div className="flex h-[100dvh] w-full flex-col items-center justify-center gap-4 bg-white p-4">
       <h1 className="text-8xl font-bold">500</h1>
       <h2 className="text-2xl font-bold">오류가 발생했습니다</h2>
       <p className="text-neutral-500">페이지를 불러오던 중 오류가 발생했습니다.</p>

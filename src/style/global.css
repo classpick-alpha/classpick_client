@@ -3,6 +3,7 @@
 @import url("https://cdn.jsdelivr.net/npm/@fontsource/work-sans@5.2.5/index.min.css");
 
 @import "tailwindcss";
+@import "tw-animate-css";
 
 /*noinspection CssUnknownProperty*/
 @plugin 'tailwind-scrollbar' {

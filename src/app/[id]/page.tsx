@@ -19,6 +19,7 @@ import { DailyReservation, RoomResponse } from '@/api/dto/room';
 import useTimetableDrag from '@/hook/timetable/drag';
 import { useApi } from '@/hook/use-api';
 import { useFilterStore } from '@/store/filter.store';
+import { getGridCols } from '@/util';
 import { eachDayOfInterval, endOfWeek, format, isSameDay, parse, startOfWeek } from 'date-fns';
 
 interface Props {
@@ -36,6 +37,10 @@ export default function Page({ params }: Props) {
 
   const { date: _date } = useFilterStore();
   const date = useMemo(() => _date || new Date(), [_date]);
+
+  const [cols, setCols] = useState(() =>
+    getGridCols(typeof window !== 'undefined' ? window.innerWidth : 1200),
+  );
 
   const {
     isDragging,
@@ -79,13 +84,19 @@ export default function Page({ params }: Props) {
     });
   }, [roomId]);
 
+  useEffect(() => {
+    const onResize = () => setCols(getGridCols(window.innerWidth));
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   if (isApiProcessing || !room || !reservations) return null;
 
   return (
-    <div className="flex max-h-[calc(100dvh-80px-32px)] w-full flex-col rounded-2xl bg-white p-4">
+    <div className="flex max-h-[calc(100dvh-80px-32px)] min-h-[calc(100dvh-64px)] w-full flex-col bg-white p-4 md:rounded-2xl">
       <TableSummary date={date} dates={dates} room={room} />
       <TableContainer handleDragEnd={handleDragEnd}>
-        {dates.map((date) => (
+        {dates.slice(0, cols).map((date) => (
           <div key={date.getTime()} className="relative">
             <TableCurrentBar date={date} />
 

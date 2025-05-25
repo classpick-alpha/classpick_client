@@ -33,7 +33,7 @@ export default function InfoCard({ reservations }: InfoCardProps) {
   if (!user) return null;
 
   return (
-    <div className="flex flex-col gap-9 rounded-2xl bg-white p-6">
+    <div className="flex flex-col gap-9 rounded-b-2xl bg-white p-6 md:rounded-2xl">
       <section className="flex justify-between">
         <button
           className="border-classpick-500 w-fit cursor-pointer rounded-full border p-2"
@@ -49,7 +49,7 @@ export default function InfoCard({ reservations }: InfoCardProps) {
         </button>
       </section>
 
-      <section className="flex gap-9">
+      <section className="flex flex-col gap-2 lg:flex-row lg:gap-8">
         <div className="flex flex-col gap-2">
           <h2 className="title1-nanum text-primary-gray-600">마이페이지</h2>
           <h2 className="body1-nanum text-primary-gray-600">예약내역</h2>
@@ -74,7 +74,7 @@ export default function InfoCard({ reservations }: InfoCardProps) {
 
         <div className="text-red h-full border-l border-zinc-500/10" />
 
-        <div className="flex gap-5">
+        <div className="flex gap-8 self-center lg:gap-5">
           <div className="flex flex-col items-center gap-1">
             <p className="caption1-nanum text-primary-gray-600">총 예약 수</p>
             <p className="title1-nanum text-primary-gray-600">{totalReservations}</p>

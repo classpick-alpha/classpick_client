@@ -73,7 +73,7 @@ export default function Layout({ children }: LayoutProps) {
       ) : (
         <NuqsAdapter>
           <Header />
-          <main className="flex gap-3.5 p-4">
+          <main className="flex gap-3.5 md:p-4">
             <SideBar />
             {children}
           </main>

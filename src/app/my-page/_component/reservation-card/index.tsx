@@ -30,7 +30,7 @@ export default function ReservationCard({ reservations, setReservations }: Reser
   });
 
   return (
-    <div className="scrollbar-none flex h-full max-h-[calc(100dvh-80px-180px-40px)] flex-col gap-6 overflow-y-auto rounded-2xl bg-white p-8 pb-4">
+    <div className="scrollbar-none flex h-full max-h-[calc(100dvh-80px-180px-180px)] min-h-[calc(100dvh-64px-330px)] flex-col gap-6 overflow-y-auto rounded-t-2xl bg-white p-8 pb-4 md:min-h-auto md:rounded-2xl lg:max-h-[calc(100dvh-80px-180px-40px)]">
       <div className="flex justify-between">
         <div className="flex w-full flex-col gap-2">
           <div className="flex items-center gap-2">
@@ -71,17 +71,18 @@ export default function ReservationCard({ reservations, setReservations }: Reser
           <CardLayout reservations={reservations} setReservations={setReservations} />
         )
       ) : (
-        <div className="my-auto flex w-fit items-center gap-20 self-center rounded-2xl bg-gray-50 py-4 pr-24 pl-4">
+        <div className="my-auto flex w-fit flex-col items-center gap-6 self-center rounded-2xl bg-gray-50 px-10 py-4 md:flex-row md:gap-20 md:pr-24 md:pl-4">
           <Image
             src={EmptyReservationsImage}
             alt="empty-reservations"
             width={200}
             height={200}
             priority
+            className="size-[160px] md:size-[200px]"
           />
 
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
+          <div className="flex w-full flex-col items-center gap-6">
+            <div className="flex flex-col items-center gap-2">
               <h2 className="title1-nanum text-zinc-800">예약한 강의실이 없습니다</h2>
               <h2 className="body1-nanum text-zinc-800">
                 아직 예약 신청한 경험이 없네요.
@@ -91,7 +92,7 @@ export default function ReservationCard({ reservations, setReservations }: Reser
             </div>
             <Link
               href="/"
-              className="body2-nanum bg-classpick-500 w-fit rounded-full px-8 py-4 text-base font-extrabold text-white"
+              className="body2-nanum bg-classpick-500 w-fit rounded-full px-8 py-4 text-sm font-extrabold text-white"
             >
               나에게 맞는 강의실 예약하러 가기
             </Link>

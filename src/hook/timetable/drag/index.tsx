@@ -1,4 +1,4 @@
-import { Dispatch, MouseEvent, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, TouchEvent, useCallback, useState } from 'react';
 
 import { splitMinute } from '@/app/[id]/_config';
 
@@ -15,6 +15,7 @@ interface useTimetableDragProps {
   reservations: DailyReservation[];
   setReservations: Dispatch<SetStateAction<DailyReservation[]>>;
 }
+
 export default function useTimetableDrag({
   room,
   lectures,
@@ -52,7 +53,7 @@ export default function useTimetableDrag({
     [lectures, reservations],
   );
 
-  const handleDragStart = useCallback((e: MouseEvent, date: Date) => {
+  const handleDragStart = useCallback((e: MouseEvent | TouchEvent, date: Date) => {
     e.preventDefault();
 
     if (isOccupied(date)) return;
@@ -63,7 +64,7 @@ export default function useTimetableDrag({
   }, []);
 
   const handleDragging = useCallback(
-    (e: MouseEvent, date: Date) => {
+    (e: MouseEvent | TouchEvent, date: Date) => {
       e.preventDefault();
 
       if (!isDragging || !dragStart) return;
@@ -89,7 +90,7 @@ export default function useTimetableDrag({
   );
 
   const handleDragEnd = useCallback(
-    (e: MouseEvent) => {
+    (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
       if (!isDragging || !dragStart || !dragEnd) return;

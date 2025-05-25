@@ -21,7 +21,6 @@ import { ChecklistIcon } from '@primer/octicons-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { Message, TickCircle } from 'iconsax-react';
-import { Forward } from 'lucide-react';
 
 interface ReserveModalProps {
   room: RoomResponse;
@@ -107,10 +106,10 @@ export default function ReserveModal({
             확인했어요
           </Button>
           {/* TODO: 공유하기를 누르면 어떤 일이 일어나나요 */}
-          <Button variant="white" className="w-auto min-w-fit">
-            <Forward size={18} />
-            공유하기
-          </Button>
+          {/*<Button variant="white" className="w-auto min-w-fit">*/}
+          {/*  <Forward size={18} />*/}
+          {/*  공유하기*/}
+          {/*</Button>*/}
         </>
       }
     >

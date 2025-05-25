@@ -11,7 +11,9 @@
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@primer/octicons-react": "^19.15.1",
+    "@radix-ui/react-dialog": "^1.1.14",
     "@tailwindcss/postcss": "^4.0.16",
+    "class-variance-authority": "^0.7.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.6.3",
     "iconsax-react": "^0.0.8",
@@ -26,6 +28,7 @@
     "tailwind-merge": "^3.1.0",
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.0.16",
+    "tw-animate-css": "^1.3.0",
     "zod": "^3.24.4",
     "zustand": "^5.0.3"
   },

@@ -5,7 +5,7 @@ import colors from 'tailwindcss/colors';
 
 export default function Page() {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white p-4">
+    <div className="flex h-[100dvh] w-full flex-col items-center justify-center gap-4 bg-white p-4">
       <h1 className="text-8xl font-bold">404</h1>
       <h2 className="text-2xl font-bold">페이지를 찾을 수 없습니다</h2>
       <p className="text-neutral-500">요청하신 페이지가 존재하지 않습니다.</p>

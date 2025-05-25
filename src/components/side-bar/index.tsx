@@ -9,7 +9,7 @@ export default function SideBar() {
   const pathname = usePathname();
 
   return (
-    <div className="h-[calc(100dvh-80px-32px)] min-w-[300px] rounded-2xl bg-white">
+    <div className="hidden h-[calc(100dvh-80px-32px)] min-w-[300px] rounded-2xl bg-white md:block">
       <SideBarMenu />
 
       <hr className="border-1 border-gray-100" />

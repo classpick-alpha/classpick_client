@@ -11,7 +11,7 @@ export default function TableContainer({ handleDragEnd, children }: TableContain
   return (
     <div className="relative mt-4 flex overflow-y-auto" onMouseUp={handleDragEnd}>
       {/*왼쪽 시간 라벨*/}
-      <div className="relative w-28">
+      <div className="relative w-16">
         {Array.from({ length: endHour - startHour + 1 }, (_, i) => (
           <div
             key={i}
@@ -24,7 +24,10 @@ export default function TableContainer({ handleDragEnd, children }: TableContain
       </div>
 
       <div className="relative flex-1">
-        <div className="relative z-10 grid grid-cols-5" style={{ height: `${totalHeight}px` }}>
+        <div
+          className="relative z-10 grid min-[0px]:grid-cols-1 min-[420px]:grid-cols-2 min-[570px]:grid-cols-3 min-[768px]:grid-cols-2 min-[918px]:grid-cols-3 min-[1068px]:grid-cols-4 min-[1218px]:grid-cols-4"
+          style={{ height: `${totalHeight}px` }}
+        >
           {children}
         </div>
       </div>
