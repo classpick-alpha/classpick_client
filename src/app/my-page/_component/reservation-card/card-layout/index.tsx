@@ -24,7 +24,7 @@ export default function CardLayout({ reservations, setReservations }: CardProps)
   return (
     <div className="flex flex-col gap-6">
       <section className="flex flex-col gap-2">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {currentStates.map((state) => (
             <button
               key={state.state}
@@ -40,7 +40,7 @@ export default function CardLayout({ reservations, setReservations }: CardProps)
             </button>
           ))}
         </div>
-        <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto p-0.5">
+        <div className="scrollbar-none flex max-w-[calc(100dvw-64px)] gap-3 overflow-x-auto p-0.5 md:max-w-[calc(100dvw-300px-32px-64px)]">
           {reservations.filter(currentState.filter).map((reservation) => (
             <ReservationCard
               key={reservation.reservationId}
@@ -81,7 +81,7 @@ export default function CardLayout({ reservations, setReservations }: CardProps)
               </button>
             ))}
           </div>
-          <div className="scrollbar-none flex max-w-[calc(100dvw-300px-32px-64px)] gap-3 overflow-x-auto p-0.5">
+          <div className="scrollbar-none flex max-w-[calc(100dvw-64px)] gap-3 overflow-x-auto p-0.5 md:max-w-[calc(100dvw-300px-32px-64px)]">
             {reservations.filter(afterState.filter).map((reservation) => (
               <ReservationCard
                 key={reservation.reservationId}

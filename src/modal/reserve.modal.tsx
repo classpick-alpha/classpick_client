@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '@/components/button';
 import { FormField } from '@/components/form/form-field';
 import { Input } from '@/components/form/input';
+import { SelectInput } from '@/components/form/select-input';
 import { TextAreaInput } from '@/components/form/text-area-input';
 import GridIconModal from '@/components/modal-container/grid-icon-modal';
 
@@ -55,6 +56,15 @@ export default function ReserveModal({
     },
   });
 
+  const endTimeOptions = useMemo(() => {
+    return makeTimeOptions(startTime);
+  }, [startTime]);
+
+  useEffect(() => {
+    const newEndTime = endTimeOptions[0];
+    form.setValue('endTime', newEndTime);
+  }, [startTime]);
+
   const onSubmit: SubmitHandler<CreateReservationRequest> = useCallback(
     (body) => {
       if (!user) return;
@@ -88,7 +98,7 @@ export default function ReserveModal({
         },
       );
     },
-    [room, user],
+    [room, user, startApi, setTimeTable, openModal],
   );
 
   if (!user) return null;
@@ -105,11 +115,6 @@ export default function ReserveModal({
             <TickCircle size={18} color="white" variant="Bold" />
             확인했어요
           </Button>
-          {/* TODO: 공유하기를 누르면 어떤 일이 일어나나요 */}
-          {/*<Button variant="white" className="w-auto min-w-fit">*/}
-          {/*  <Forward size={18} />*/}
-          {/*  공유하기*/}
-          {/*</Button>*/}
         </>
       }
     >
@@ -148,15 +153,34 @@ export default function ReserveModal({
             <Input variant="modal" value={format(date, 'yyyy.MM.dd E', { locale: ko })} disabled />
           </FormField>
 
-          <FormField label="시간">
-            <Input variant="modal" value={format(startTime, 'HH:mm')} disabled />
-            <span className="subtitle2-pretendard text-neutral-400">부터</span>
-            <Input variant="modal" value={format(endTime, 'HH:mm')} disabled />
-            <span className="subtitle2-pretendard text-neutral-400">까지</span>
-          </FormField>
-
           <FormField label="장소">
             <Input variant="modal" value={`${room.placeName} ${room.unitNumber}호`} disabled />
+          </FormField>
+
+          <FormField label="시작 시간">
+            <Input variant="modal" value={format(startTime, 'HH:mm')} disabled />
+            <span className="subtitle2-pretendard text-neutral-400">부터</span>
+          </FormField>
+
+          <FormField label="종료 시간">
+            <div className="hidden sm:block">
+              <Input variant="modal" value={format(endTime, 'HH:mm')} disabled />
+            </div>
+            <SelectInput
+              {...form.register('endTime')}
+              value={form.watch('endTime')}
+              onChange={(e) => form.setValue('endTime', e.target.value)}
+              disabled={isApiProcessing}
+              style={{ minWidth: 90 }}
+              className="block sm:hidden"
+            >
+              {endTimeOptions.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </SelectInput>
+            <span className="subtitle2-pretendard text-neutral-400">까지</span>
           </FormField>
 
           <hr className="col-span-2 -mx-7 w-[494px] text-indigo-50" />
@@ -187,4 +211,23 @@ export default function ReserveModal({
       </div>
     </GridIconModal>
   );
+}
+
+function makeTimeOptions(start: Date, endOfDay = 23): string[] {
+  const times: string[] = [];
+  const current = new Date(start);
+
+  current.setMinutes(current.getMinutes() + 30 - (current.getMinutes() % 30));
+  while (
+    current.getHours() < endOfDay ||
+    (current.getHours() === endOfDay && current.getMinutes() === 0)
+  ) {
+    times.push(
+      current
+        .toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })
+        .slice(0, 5),
+    );
+    current.setMinutes(current.getMinutes() + 30);
+  }
+  return times;
 }

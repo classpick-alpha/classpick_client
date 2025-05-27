@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,14 +23,27 @@ interface ReservationCardProps {
 
 export default function ReservationCard({ reservations, setReservations }: ReservationCardProps) {
   const [layoutType, setLayoutType] = useQueryState<LayoutType>('layout', {
-    defaultValue: 'kanban',
+    defaultValue: 'card',
     clearOnDefault: false,
     parse: (value) => value as LayoutType,
     serialize: (value) => value as string,
   });
 
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 1280) {
+        setLayoutType('card').then();
+      }
+    }
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setLayoutType]);
+
   return (
-    <div className="scrollbar-none flex h-full max-h-[calc(100dvh-80px-180px-180px)] min-h-[calc(100dvh-64px-330px)] flex-col gap-6 overflow-y-auto rounded-t-2xl bg-white p-8 pb-4 md:min-h-auto md:rounded-2xl lg:max-h-[calc(100dvh-80px-180px-40px)]">
+    <div className="scrollbar-none flex h-full flex-col gap-6 overflow-y-auto rounded-t-2xl bg-white p-8 pb-4 md:max-h-[calc(100dvh-80px-180px-180px)] md:rounded-2xl lg:max-h-[calc(100dvh)]">
       <div className="flex justify-between">
         <div className="flex w-full flex-col gap-2">
           <div className="flex items-center gap-2">
@@ -41,7 +54,7 @@ export default function ReservationCard({ reservations, setReservations }: Reser
         </div>
 
         {reservations.length > 0 && (
-          <div className="flex gap-2">
+          <div className="hidden gap-2 xl:flex">
             <Kanban
               size={24}
               color={

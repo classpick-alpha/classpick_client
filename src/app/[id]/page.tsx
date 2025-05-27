@@ -93,7 +93,7 @@ export default function Page({ params }: Props) {
   if (isApiProcessing || !room || !reservations) return null;
 
   return (
-    <div className="flex max-h-[calc(100dvh-80px-32px)] min-h-[calc(100dvh-64px)] w-full flex-col bg-white p-4 md:rounded-2xl">
+    <div className="flex max-h-[calc(100dvh-80px-32px)] min-h-[calc(100dvh-64px)] w-full flex-col gap-6 overflow-y-auto bg-white p-4 md:min-h-auto md:rounded-2xl">
       <TableSummary date={date} dates={dates} room={room} />
       <TableContainer handleDragEnd={handleDragEnd}>
         {dates.slice(0, cols).map((date) => (

@@ -1,4 +1,4 @@
-import { MouseEvent, TouchEvent, useCallback } from 'react';
+import { MouseEvent, TouchEvent, useCallback, useRef } from 'react';
 
 import { pxPerMinute, splitMinute, startHour } from '@/app/[id]/_config';
 
@@ -27,6 +27,33 @@ export default function TableBlock({
     [date],
   );
 
+  const longPressTimeout = useRef<NodeJS.Timeout | null>(null);
+  const isTouchDragging = useRef(false);
+
+  const onTouchStart = (e: TouchEvent<HTMLDivElement>, slotDate: Date) => {
+    if (longPressTimeout.current) clearTimeout(longPressTimeout.current);
+
+    longPressTimeout.current = setTimeout(() => {
+      isTouchDragging.current = true;
+      handleDragStart(e, slotDate);
+    }, 350);
+  };
+
+  const onTouchMove = (e: TouchEvent<HTMLDivElement>, slotDate: Date) => {
+    if (isTouchDragging.current) {
+      e.preventDefault();
+      handleDragging(e, slotDate);
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (longPressTimeout.current) {
+      clearTimeout(longPressTimeout.current);
+      longPressTimeout.current = null;
+    }
+    isTouchDragging.current = false;
+  };
+
   return (
     <>
       {timeSlots.map((slot) => {
@@ -47,9 +74,11 @@ export default function TableBlock({
               className="group absolute right-0 left-[10px] w-[calc(100%-20px)] cursor-pointer"
               style={{ top: `${slot * pxPerMinute}px`, height: `${splitMinute * pxPerMinute}px` }}
               onMouseDown={(e) => !occupied && handleDragStart(e, slotDate)}
-              onTouchStart={(e) => !occupied && handleDragStart(e, slotDate)}
               onMouseEnter={(e) => !occupied && handleDragging(e, slotDate)}
-              onTouchMove={(e) => !occupied && handleDragging(e, slotDate)}
+              onTouchStart={(e) => !occupied && onTouchStart(e, slotDate)}
+              onTouchMove={(e) => !occupied && onTouchMove(e, slotDate)}
+              onTouchEnd={onTouchEnd}
+              onTouchCancel={onTouchEnd}
             >
               {!occupied && !isDragging && (
                 <div className="absolute inset-0 hidden items-center justify-center rounded-md border-2 border-dashed border-red-300 bg-orange-500/10 backdrop-blur-[1px] group-hover:flex">
