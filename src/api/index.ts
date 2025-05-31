@@ -1,6 +1,6 @@
 import { LectureController } from '@/api/controller/lecture';
 import { ReservationAdminController, ReservationController } from '@/api/controller/reservation';
-import { RoomAdminController, RoomController } from '@/api/controller/room';
+import { RoomAdminController, RoomController, RoomExcelController } from '@/api/controller/room';
 import { UserController } from '@/api/controller/user';
 import ApiRequest from '@/api/request';
 
@@ -15,6 +15,7 @@ export default class Api {
     RoomAdmin: new RoomAdminController(this.request),
     Reservation: new ReservationController(this.request),
     ReservationAdmin: new ReservationAdminController(this.request),
+    RoomExcelController: new RoomExcelController(this.request),
     Lecture: new LectureController(this.request),
   };
 

@@ -7,6 +7,7 @@ import ReserveModal from '@/modal/reserve.modal';
 import { LectureResponse } from '@/api/dto/lecture';
 import { DailyReservation, RoomResponse } from '@/api/dto/room';
 import { useModalStore } from '@/store/modal.store';
+import { useUserStore } from '@/store/user.store';
 import { isSameDay, parse } from 'date-fns';
 
 interface useTimetableDragProps {
@@ -22,6 +23,7 @@ export default function useTimetableDrag({
   reservations,
   setReservations,
 }: useTimetableDragProps) {
+  const { user } = useUserStore();
   const { openModal } = useModalStore();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -50,7 +52,7 @@ export default function useTimetableDrag({
             parse(lecture.startTime, 'HH:mm', date).getTime() <= date.getTime() &&
             date.getTime() < parse(lecture.endTime, 'HH:mm', date).getTime(),
         ),
-    [lectures, reservations],
+    [user, lectures, reservations],
   );
 
   const handleDragStart = useCallback((e: MouseEvent | TouchEvent, date: Date) => {

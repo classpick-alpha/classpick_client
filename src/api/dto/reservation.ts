@@ -1,4 +1,5 @@
 import { RoomResponse } from '@/api/dto/room';
+import { UserResponse } from '@/api/dto/user';
 import { LocalDatePattern, LocalTimePattern } from '@/api/validation';
 import { z } from 'zod';
 
@@ -47,5 +48,32 @@ export interface ReservationListResponse {
 
 export interface OcrResponse {
   success: boolean;
+}
+
+export interface NoshowResponse {
+  room: RoomResponse;
+  noshowId: number;
+  verified: boolean;
+}
+
+export interface NoshowListResponse {
+  noshows: NoshowResponse[];
+}
+
+export interface UserReservationResponse {
+  user: UserResponse;
+  room: RoomResponse;
+  reservationId: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  people: number;
+  purpose: string;
+  status: Status;
+  ocrVerified: boolean;
+}
+
+export interface UserReservationListResponse {
+  userReservations: UserReservationResponse[];
 }
 // ======================================== Response ========================================

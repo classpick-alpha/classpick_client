@@ -1,4 +1,4 @@
-import { Category, Icon, TaskSquare } from 'iconsax-react';
+import { Category, Icon, LocationTick, TaskSquare } from 'iconsax-react';
 
 export interface SideBarMenu {
   icon: Icon;
@@ -17,9 +17,13 @@ export const sideBarMenu: SideBarMenu[] = [
     content: '마이페이지',
     link: '/my-page',
   },
-  // {
-  //   icon: Setting2,
-  //   content: '설정',
-  //   link: '/setting',
-  // },
+];
+
+export const adminSideBarMenu: SideBarMenu[] = [
+  ...sideBarMenu,
+  {
+    icon: LocationTick,
+    content: '예약 현황',
+    link: '/admin/reservation',
+  },
 ];

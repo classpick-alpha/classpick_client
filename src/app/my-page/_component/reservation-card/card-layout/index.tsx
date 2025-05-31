@@ -10,6 +10,7 @@ import {
 import ReservationCard from '@/app/my-page/_component/reservation-card/card-layout/reservation-card';
 
 import { ReservationResponse } from '@/api/dto/reservation';
+import { parse } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 interface CardProps {
@@ -41,13 +42,20 @@ export default function CardLayout({ reservations, setReservations }: CardProps)
           ))}
         </div>
         <div className="scrollbar-none flex max-w-[calc(100dvw-64px)] gap-3 overflow-x-auto p-0.5 md:max-w-[calc(100dvw-300px-32px-64px)]">
-          {reservations.filter(currentState.filter).map((reservation) => (
-            <ReservationCard
-              key={reservation.reservationId}
-              reservation={reservation}
-              setReservations={setReservations}
-            />
-          ))}
+          {reservations
+            .filter(currentState.filter)
+            .sort(
+              (a, b) =>
+                parse(a.date, 'yyyy-MM-dd', new Date()).getTime() -
+                parse(b.date, 'yyyy-MM-dd', new Date()).getTime(),
+            )
+            .map((reservation) => (
+              <ReservationCard
+                key={reservation.reservationId}
+                reservation={reservation}
+                setReservations={setReservations}
+              />
+            ))}
         </div>
       </section>
 

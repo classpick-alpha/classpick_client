@@ -4,7 +4,7 @@ import { RedirectType, redirect } from 'next/navigation';
 
 import { RoomResponse } from '@/api/dto/room';
 import { getGridCols, nowExcludeTime } from '@/util';
-import { formatDate } from 'date-fns';
+import { formatDate, isSameDay } from 'date-fns';
 import { MoveLeft } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
@@ -25,6 +25,14 @@ export default function TableSummary({ date, dates, room }: TableSummaryProps) {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  // 항상 오늘(또는 선택된 date)이 보여지도록 visibleDates 계산
+  const visibleDates = useMemo(() => {
+    const todayIndex = dates.findIndex((d) => isSameDay(d, date));
+    const maxStart = Math.max(dates.length - cols, 0);
+    const startIndex = Math.min(Math.max(todayIndex - Math.floor(cols / 2), 0), maxStart);
+    return dates.slice(startIndex, startIndex + cols);
+  }, [dates, date, cols]);
 
   return (
     <div className="flex flex-col gap-3 rounded-t-2xl">
@@ -48,24 +56,24 @@ export default function TableSummary({ date, dates, room }: TableSummaryProps) {
       <div className="flex">
         <div className="min-w-16" />
         <div className="grid flex-1 min-[0px]:grid-cols-1 min-[420px]:grid-cols-2 min-[570px]:grid-cols-3 min-[768px]:grid-cols-2 min-[918px]:grid-cols-3 min-[1068px]:grid-cols-4 min-[1218px]:grid-cols-4">
-          {dates.slice(0, cols).map((date) => (
-            <div key={date.getTime()} className="flex w-full flex-col items-center gap-1">
+          {visibleDates.map((day) => (
+            <div key={day.getTime()} className="flex w-full flex-col items-center gap-1">
               <div
                 className={twMerge(
                   'text-xs font-bold text-zinc-500',
-                  today.getTime() === date.getTime() && 'text-classpick-500',
+                  today.getTime() === day.getTime() && 'text-classpick-500',
                 )}
               >
-                {formatDate(date, 'E').toUpperCase()}
+                {formatDate(day, 'E').toUpperCase()}
               </div>
 
               <span
                 className={twMerge(
                   'flex size-11 items-center justify-center text-2xl font-bold text-neutral-700',
-                  today.getTime() === date.getTime() && 'bg-classpick-500 rounded-full text-white',
+                  today.getTime() === day.getTime() && 'bg-classpick-500 rounded-full text-white',
                 )}
               >
-                {date.getDate()}
+                {day.getDate()}
               </span>
             </div>
           ))}

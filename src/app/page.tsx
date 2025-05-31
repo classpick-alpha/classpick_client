@@ -1,19 +1,26 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
+import Button from '@/components/button';
+
 import Api from '@/api';
 import { RoomResponse } from '@/api/dto/room';
-import { useApi } from '@/hook/use-api';
+import { Role } from '@/api/dto/user';
+import { useApi, useApiWithToast } from '@/hook/use-api';
 import { useFilterStore } from '@/store/filter.store';
+import { useUserStore } from '@/store/user.store';
 import { format } from 'date-fns';
 import { MoveUpRight } from 'lucide-react';
 
 export default function Page() {
   const [isApiProcessing, startApi] = useApi();
+  const [isApiProcessing2, startApi2] = useApiWithToast();
+
+  const { user } = useUserStore();
 
   const observerTarget = useRef(null);
 
@@ -21,6 +28,21 @@ export default function Page() {
   const [visibleRoomLength, setVisibleRoomLength] = useState(60);
 
   const { placeName, capacity, date, startTime, endTime } = useFilterStore();
+
+  const handleFileChange = useCallback(
+    (file: File) => {
+      startApi2(
+        async () => {
+          await Api.Domain.RoomExcelController.uploadRoomExcel(file);
+        },
+        {
+          loading: '강의실 엑셀 파일을 업로드하는 중입니다.',
+          success: '강의실 엑셀 파일 업로드가 완료되었습니다.',
+        },
+      );
+    },
+    [startApi2],
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -61,11 +83,32 @@ export default function Page() {
         background: 'radial-gradient(ellipse 150% 100% at top center, #595cff -100%, white 40%)',
       }}
     >
-      <div className="flex items-center gap-6">
-        <h2 className="title1-nanum text-primary-gray-600">빈 강의실 목록</h2>
-        <p className="body2-nanum text-classpick-300 rounded-full border border-white bg-white/50 px-4 py-2">
-          예약 가능한 강의실 {allRooms.length}
-        </p>
+      <div className="flex flex-row justify-between">
+        <div className="flex items-center gap-6">
+          <h2 className="title1-nanum text-primary-gray-600">빈 강의실 목록</h2>
+          <p className="body2-nanum text-classpick-300 rounded-full border border-white bg-white/50 px-4 py-2">
+            예약 가능한 강의실 {allRooms.length}
+          </p>
+        </div>
+
+        {user?.role === Role.MANAGER && (
+          <Button
+            className="hidden w-fit self-end py-3 min-[870px]:block"
+            variant="white"
+            disabled={isApiProcessing2}
+            onClick={() => document.getElementById('fileUpload')?.click()}
+          >
+            강의실 추가
+          </Button>
+        )}
+
+        <input
+          id="fileUpload"
+          className="hidden"
+          type="file"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          onChange={(e) => e.target.files?.[0] && handleFileChange(e.target.files[0])}
+        />
       </div>
 
       <div className="scrollbar-none flex flex-wrap justify-center gap-6 overflow-y-auto md:pb-6">

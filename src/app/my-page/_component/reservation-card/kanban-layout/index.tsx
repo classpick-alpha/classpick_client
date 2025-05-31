@@ -4,6 +4,7 @@ import { steps } from '@/app/my-page/_component/reservation-card/kanban-layout/_
 import ReservationCard from '@/app/my-page/_component/reservation-card/kanban-layout/reservation-card';
 
 import { ReservationResponse } from '@/api/dto/reservation';
+import { parse } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 interface KanbanProps {
@@ -19,14 +20,21 @@ export default function KanbanLayout({ reservations, setReservations }: KanbanPr
           <p className={twMerge('caption1-nanum font-bold', step.color.text)}>{step.title}</p>
           <div className={twMerge('h-[6px] w-full rounded-full', step.color.background)} />
           <div className="scrollbar-none flex max-h-[calc(100dvh-80px-180px-52px-166px)] flex-col gap-2 overflow-y-auto p-0.5">
-            {reservations.filter(step.filter).map((reservation) => (
-              <ReservationCard
-                key={reservation.reservationId}
-                step={step}
-                reservation={reservation}
-                setReservations={setReservations}
-              />
-            ))}
+            {reservations
+              .filter(step.filter)
+              .sort(
+                (a, b) =>
+                  parse(a.date, 'yyyy-MM-dd', new Date()).getTime() -
+                  parse(b.date, 'yyyy-MM-dd', new Date()).getTime(),
+              )
+              .map((reservation) => (
+                <ReservationCard
+                  key={reservation.reservationId}
+                  step={step}
+                  reservation={reservation}
+                  setReservations={setReservations}
+                />
+              ))}
           </div>
         </div>
       ))}

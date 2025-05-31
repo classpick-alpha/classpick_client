@@ -1,10 +1,12 @@
 import { UploadImageResponse } from '@/api/dto/common';
 import {
   CreateReservationRequest,
+  NoshowListResponse,
   OcrRequest,
   OcrResponse,
   ReservationListResponse,
   ReservationResponse,
+  UserReservationListResponse,
 } from '@/api/dto/reservation';
 import ApiRequest from '@/api/request';
 
@@ -48,5 +50,13 @@ export class ReservationAdminController {
 
   public async rejectReservation(reservationId: number): Promise<void> {
     return this.request.post(`/v0.0/admin/reservation/${reservationId}/rejected`);
+  }
+
+  public async getNoshowsList(): Promise<NoshowListResponse> {
+    return this.request.get('/v0.0/admin/reservation/noshows');
+  }
+
+  public async getUserReservationsList(): Promise<UserReservationListResponse> {
+    return this.request.get('/v0.0/admin/reservations');
   }
 }

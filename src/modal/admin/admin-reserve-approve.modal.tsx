@@ -3,75 +3,76 @@ import { Dispatch, SetStateAction, useCallback } from 'react';
 import Button from '@/components/button';
 import { FormField } from '@/components/form/form-field';
 import { Input } from '@/components/form/input';
+import { TextAreaInput } from '@/components/form/text-area-input';
 import GridIconModal from '@/components/modal-container/grid-icon-modal';
 
 import Api from '@/api';
-import { ReservationResponse, UserReservationResponse } from '@/api/dto/reservation';
+import { UserReservationResponse } from '@/api/dto/reservation';
 import { useApiWithToast } from '@/hook/use-api';
 import { useModalStore } from '@/store/modal.store';
-import { useUserStore } from '@/store/user.store';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { TickCircle, Warning2 } from 'iconsax-react';
-import { Trash2 } from 'lucide-react';
-import colors from 'tailwindcss/colors';
+import { CloseCircle, ShieldTick, TickCircle } from 'iconsax-react';
 
-type Data = ReservationResponse | UserReservationResponse;
-
-interface ReserveRejectedDetailModalProps {
-  reservation: Data;
-  setReservations: Dispatch<SetStateAction<Data[]>>;
+interface AdminReserveApproveModalProps {
+  reservation: UserReservationResponse;
+  setReservations: Dispatch<SetStateAction<UserReservationResponse[]>>;
 }
 
-export default function ReserveDetailModal({
+export default function AdminReserveApproveModal({
   reservation,
   setReservations,
-}: ReserveRejectedDetailModalProps) {
-  const { user } = useUserStore();
-  const { closeModal } = useModalStore();
-
+}: AdminReserveApproveModalProps) {
   const [isApiProcessing, startApi] = useApiWithToast();
 
-  const handleCancelReservation = useCallback(() => {
-    if (!user) return;
+  const { closeModal } = useModalStore();
+
+  const handleApprove = useCallback(() => {
     startApi(
       async () => {
-        await Api.Domain.Reservation.cancelReservation(reservation.reservationId);
-        setReservations((prev) =>
-          prev.filter((x) => x.reservationId !== reservation.reservationId),
-        );
+        await Api.Domain.ReservationAdmin.approveReservation(reservation.reservationId);
+        const { userReservations } = await Api.Domain.ReservationAdmin.getUserReservationsList();
+        setReservations(userReservations);
       },
       {
-        loading: '강의실 예약을 취소하고 있습니다.',
-        success: '강의실 예약이 취소되었습니다.',
+        loading: '예약을 승인하는 중입니다.',
+        success: '예약이 승인했습니다.',
         finally: closeModal,
       },
     );
-  }, [closeModal, user, reservation, setReservations]);
+  }, [reservation]);
 
-  if (!user) return null;
+  const handleReject = useCallback(() => {
+    startApi(
+      async () => {
+        await Api.Domain.ReservationAdmin.rejectReservation(reservation.reservationId);
+        const { userReservations } = await Api.Domain.ReservationAdmin.getUserReservationsList();
+        setReservations(userReservations);
+      },
+      {
+        loading: '예약을 반려하는 중입니다.',
+        success: '예약이 반려했습니다.',
+        finally: closeModal,
+      },
+    );
+  }, [reservation]);
 
   return (
     <GridIconModal
       width={550}
-      color={colors.gray[500]}
-      icon={Warning2}
-      iconColor={colors.gray[500]}
-      title="예약한 강의실을 확인해주세요"
+      color="var(--color-classpick-500)"
+      icon={ShieldTick}
+      iconColor="var(--color-classpick-500)"
+      title="예약 상세 정보"
       buttons={
         <>
-          <Button variant="secondary" onClick={closeModal}>
-            <TickCircle size={18} color="white" variant="Bold" />
-            확인했습니다.
+          <Button variant="white" onClick={handleReject} disabled={isApiProcessing}>
+            <CloseCircle size={18} color="black" variant="Bold" />
+            반려하기
           </Button>
-          <Button
-            variant="white"
-            className="w-auto min-w-fit"
-            disabled={isApiProcessing}
-            onClick={handleCancelReservation}
-          >
-            <Trash2 size={18} />
-            예약 취소
+          <Button variant="primary" onClick={handleApprove} disabled={isApiProcessing}>
+            <TickCircle size={18} color="white" variant="Bold" />
+            승인하기
           </Button>
         </>
       }
@@ -81,21 +82,31 @@ export default function ReserveDetailModal({
           <Input
             variant="modal"
             className="text-primary-gray-600"
-            value={user.schoolNumber}
+            value={reservation.user.schoolNumber}
             disabled
           />
-          <Input variant="modal" className="text-primary-gray-600" value={user.name} disabled />
+          <Input
+            variant="modal"
+            className="text-primary-gray-600"
+            value={reservation.user.name}
+            disabled
+          />
         </FormField>
 
         <FormField label="이메일">
-          <Input variant="modal" className="text-primary-gray-600" value={user.email} disabled />
+          <Input
+            variant="modal"
+            className="text-primary-gray-600"
+            value={reservation.user.email}
+            disabled
+          />
         </FormField>
 
         <FormField label="연락처">
           <Input
             variant="modal"
             className="text-primary-gray-600"
-            value={user.phoneNumber}
+            value={reservation.user.phoneNumber}
             disabled
           />
         </FormField>
@@ -144,6 +155,10 @@ export default function ReserveDetailModal({
             value={`${reservation.room.placeName} ${reservation.room.unitNumber}호`}
             disabled
           />
+        </FormField>
+
+        <FormField label="사용목적" className="col-span-2">
+          <TextAreaInput value={reservation.purpose} readOnly />
         </FormField>
       </div>
     </GridIconModal>

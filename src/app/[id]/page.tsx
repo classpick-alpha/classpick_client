@@ -61,6 +61,13 @@ export default function Page({ params }: Props) {
     [date],
   );
 
+  const visibleDates = useMemo(() => {
+    const todayIndex = dates.findIndex((d) => isSameDay(d, date));
+    const maxStart = Math.max(dates.length - cols, 0);
+    const startIndex = Math.min(Math.max(todayIndex - Math.floor(cols / 2), 0), maxStart);
+    return dates.slice(startIndex, startIndex + cols);
+  }, [dates, date, cols]);
+
   const dateToSlot = useCallback(
     (date: Date) => Math.max(0, date.getHours() - startHour) * 60 + date.getMinutes(),
     [],
@@ -96,7 +103,7 @@ export default function Page({ params }: Props) {
     <div className="flex max-h-[calc(100dvh-80px-32px)] min-h-[calc(100dvh-64px)] w-full flex-col gap-6 overflow-y-auto bg-white p-4 md:min-h-auto md:rounded-2xl">
       <TableSummary date={date} dates={dates} room={room} />
       <TableContainer handleDragEnd={handleDragEnd}>
-        {dates.slice(0, cols).map((date) => (
+        {visibleDates.map((date) => (
           <div key={date.getTime()} className="relative">
             <TableCurrentBar date={date} />
 

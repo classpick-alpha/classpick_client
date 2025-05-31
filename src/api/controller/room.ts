@@ -41,3 +41,14 @@ export class RoomAdminController {
     return this.request.post('/v0.0/admin/rooms', data);
   }
 }
+
+export class RoomExcelController {
+  constructor(private readonly request: ApiRequest) {}
+
+  public async uploadRoomExcel(file: File): Promise<RoomResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.request.post('/v0.0/rooms/excel/import', formData);
+  }
+}
