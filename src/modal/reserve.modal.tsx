@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '@/components/button';
@@ -58,11 +58,6 @@ export default function ReserveModal({
 
   const endTimeOptions = useMemo(() => {
     return makeTimeOptions(startTime);
-  }, [startTime]);
-
-  useEffect(() => {
-    const newEndTime = endTimeOptions[0];
-    form.setValue('endTime', newEndTime);
   }, [startTime]);
 
   const onSubmit: SubmitHandler<CreateReservationRequest> = useCallback(
